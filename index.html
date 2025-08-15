@@ -1,22 +1,144 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Background Generator</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Gradient Generator</title>
     <link rel="stylesheet" href="style.css" />
-  </head>
-  <body id="gradient">
-    <h1>Gradient Background Generator</h1>
-    <h2>Current Background</h2>
-    <!-- Color Pickers -->
-    <input class="color1" type="color" name="color1" value="#FFFF00" />
-    <input class="color2" type="color" name="color2" value="#FF0000" />
-    <!-- h3 will be where the color will be -->
-    <h3></h3>
-    <div class="random">
-      <button class="random-button">Generate Random Color</button>
+</head>
+<body id="gradient">
+    <div class="container">
+        <header>
+            <h1>🎨 Advanced Gradient Generator</h1>
+            <p>Create beautiful multi-color gradients for your projects</p>
+        </header>
+
+        <main>
+            <!-- Live Preview Section -->
+            <section class="preview-section">
+                <h2>Live Preview</h2>
+                <div class="gradient-preview" id="gradientPreview"></div>
+                <div class="preview-demos">
+                    <div class="demo-card">Card</div>
+                    <button class="demo-button">Button</button>
+                    <div class="demo-text">
+                        <h3>Sample Text</h3>
+                        <p>See how your gradient looks with content</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gradient Controls -->
+            <section class="controls-section">
+                <div class="gradient-controls">
+                    <div class="control-group">
+                        <label for="gradientType">Gradient Type:</label>
+                        <select id="gradientType">
+                            <option value="linear">Linear</option>
+                            <option value="radial">Radial</option>
+                            <option value="conic">Conic</option>
+                        </select>
+                    </div>
+
+                    <div class="control-group" id="angleControl">
+                        <label for="gradientAngle">Angle: <span id="angleValue">90deg</span></label>
+                        <input type="range" id="gradientAngle" min="0" max="360" value="90">
+                    </div>
+
+                    <div class="control-group" id="radialControl" style="display: none;">
+                        <label for="radialPosition">Position:</label>
+                        <select id="radialPosition">
+                            <option value="center">Center</option>
+                            <option value="top">Top</option>
+                            <option value="bottom">Bottom</option>
+                            <option value="left">Left</option>
+                            <option value="right">Right</option>
+                            <option value="top left">Top Left</option>
+                            <option value="top right">Top Right</option>
+                            <option value="bottom left">Bottom Left</option>
+                            <option value="bottom right">Bottom Right</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Color Stops -->
+                <div class="color-stops-section">
+                    <h3>Color Stops</h3>
+                    <div id="colorStopsContainer">
+                        <!-- Color stops will be added dynamically -->
+                    </div>
+                    <button id="addColorStop" class="add-stop-btn">+ Add Color Stop</button>
+                </div>
+            </section>
+
+            <!-- Preset Gradients -->
+            <section class="presets-section">
+                <h3>Popular Presets</h3>
+                <div class="presets-grid" id="presetsGrid">
+                    <!-- Presets will be loaded dynamically -->
+                </div>
+            </section>
+
+            <!-- Export Section -->
+            <section class="export-section">
+                <h3>Export Your Gradient</h3>
+                <div class="export-tabs">
+                    <button class="tab-btn active" data-tab="css">CSS</button>
+                    <button class="tab-btn" data-tab="tailwind">Tailwind</button>
+                    <button class="tab-btn" data-tab="react">React</button>
+                    <button class="tab-btn" data-tab="scss">SCSS</button>
+                </div>
+
+                <div class="export-content">
+                    <div id="cssTab" class="tab-content active">
+                        <textarea id="cssOutput" readonly placeholder="CSS code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="cssOutput">📋 Copy CSS</button>
+                    </div>
+
+                    <div id="tailwindTab" class="tab-content">
+                        <textarea id="tailwindOutput" readonly placeholder="Tailwind classes will appear here..."></textarea>
+                        <button class="copy-btn" data-target="tailwindOutput">📋 Copy Tailwind</button>
+                    </div>
+
+                    <div id="reactTab" class="tab-content">
+                        <textarea id="reactOutput" readonly placeholder="React JSX will appear here..."></textarea>
+                        <button class="copy-btn" data-target="reactOutput">📋 Copy React</button>
+                    </div>
+
+                    <div id="scssTab" class="tab-content">
+                        <textarea id="scssOutput" readonly placeholder="SCSS variables will appear here..."></textarea>
+                        <button class="copy-btn" data-target="scssOutput">📋 Copy SCSS</button>
+                    </div>
+                </div>
+
+                <!-- Download Options -->
+                <div class="download-options">
+                    <button id="downloadPNG" class="download-btn">📥 Download PNG</button>
+                    <button id="downloadSVG" class="download-btn">📥 Download SVG</button>
+                    <button id="randomGradient" class="random-btn">🎲 Random Gradient</button>
+                </div>
+            </section>
+
+            <!-- Share Section -->
+            <section class="share-section">
+                <h3>Share Your Creation</h3>
+                <div class="share-controls">
+                    <input type="text" id="shareUrl" readonly placeholder="Shareable URL will appear here...">
+                    <button id="generateShare" class="share-btn">🔗 Generate Link</button>
+                    <button class="copy-btn" data-target="shareUrl">📋 Copy Link</button>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>Created by <a href="https://www.rembertdesigns.co/" target="_blank">Richard Rembert</a></p>
+            <p>Advanced Gradient Generator 2.0</p>
+        </footer>
     </div>
-    <script type="text/javascript" src="main.js"></script>
-    <div class="footer"><p>Created by <a href="https://www.rembertdesigns.co/" target="_blank">Richard Rembert</a></p>
-    </div>
-  </body>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="main.js"></script>
+</body>
 </html>
