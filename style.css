@@ -76,6 +76,40 @@ section {
   background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-preview.animated {
+  background-size: 300% 300%;
+}
+
+/* Animation Classes */
+.rotate-animation {
+  animation: rotateGradient var(--animation-duration, 3s) linear infinite var(--animation-direction, normal);
+}
+
+.shift-animation {
+  animation: shiftGradient var(--animation-duration, 3s) ease-in-out infinite var(--animation-direction, normal);
+}
+
+.pulse-animation {
+  animation: pulseGradient var(--animation-duration, 3s) ease-in-out infinite var(--animation-direction, normal);
+}
+
+@keyframes rotateGradient {
+  0% { filter: hue-rotate(0deg); }
+  100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes shiftGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes pulseGradient {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.8; }
 }
 
 .preview-demos {
@@ -111,6 +145,97 @@ section {
 
 .demo-text {
   background: var(--current-gradient, linear-gradient(90deg, #667eea 0%, #764ba2 100%));
+}
+
+/* Animation Controls */
+.animation-controls {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 2px solid #e2e8f0;
+}
+
+.animation-controls h3 {
+  color: #1e293b;
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.animation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.animation-control-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.animation-control-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #374151;
+  font-size: 14px;
+}
+
+.animation-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.animation-btn {
+  padding: 8px 16px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.animation-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.animation-btn:hover:not(.active) {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.play-pause-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.play-pause-btn:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+.play-pause-btn.paused {
+  background: #ef4444;
+}
+
+.play-pause-btn.paused:hover {
+  background: #dc2626;
 }
 
 /* Controls Section */
@@ -470,6 +595,10 @@ section {
 
   .presets-grid {
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  }
+
+  .animation-grid {
+      grid-template-columns: 1fr;
   }
 }
 
