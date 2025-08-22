@@ -1,4 +1,4 @@
-// Enhanced Gradient Generator JavaScript with Animation Controls
+// Enhanced Gradient Generator JavaScript with Animation Controls and Advanced Color Picker
 class GradientGenerator {
     constructor() {
         this.colorStops = [
@@ -15,12 +15,18 @@ class GradientGenerator {
         this.animationDirection = 'normal';
         this.isPlaying = false;
         
+        // Advanced color picker properties
+        this.currentEditingColorIndex = null;
+        this.recentColors = JSON.parse(localStorage.getItem('gradientRecentColors') || '[]');
+        this.currentPickerColor = { h: 0, s: 0, l: 0 };
+        
         this.init();
     }
 
     init() {
         this.setupEventListeners();
         this.setupAnimationControls();
+        this.setupColorPickerControls();
         this.loadPresets();
         this.renderColorStops();
         this.updateGradient();
@@ -120,6 +126,458 @@ class GradientGenerator {
 
         // Set default animation type to "none" as active
         document.querySelector('[data-type="none"]').classList.add('active');
+    }
+
+    setupColorPickerControls() {
+        // Color picker modal controls
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.color-stop input[type="color"]')) {
+                const colorInput = e.target;
+                const index = parseInt(colorInput.dataset.index);
+                this.openAdvancedColorPicker(index, colorInput.value);
+            }
+        });
+
+        // Modal close buttons
+        document.getElementById('closeColorPicker').addEventListener('click', () => {
+            this.closeColorPickerModal();
+        });
+
+        document.getElementById('cancelColorPicker').addEventListener('click', () => {
+            this.closeColorPickerModal();
+        });
+
+        // Click outside modal to close
+        document.getElementById('colorPickerModal').addEventListener('click', (e) => {
+            if (e.target.id === 'colorPickerModal') {
+                this.closeColorPickerModal();
+            }
+        });
+
+        // Apply color button
+        document.getElementById('applyColorBtn').addEventListener('click', () => {
+            this.applySelectedColor();
+        });
+
+        // Color harmony buttons
+        document.querySelectorAll('.harmony-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.harmony-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                this.generateColorHarmony(e.target.dataset.harmony);
+            });
+        });
+
+        // HSL sliders
+        document.getElementById('hueSlider').addEventListener('input', (e) => {
+            this.currentPickerColor.h = parseInt(e.target.value);
+            document.getElementById('hueValue').textContent = `${e.target.value}°`;
+            this.updateColorFromHSL();
+        });
+
+        document.getElementById('satSlider').addEventListener('input', (e) => {
+            this.currentPickerColor.s = parseInt(e.target.value);
+            document.getElementById('satValue').textContent = `${e.target.value}%`;
+            this.updateColorFromHSL();
+        });
+
+        document.getElementById('lightSlider').addEventListener('input', (e) => {
+            this.currentPickerColor.l = parseInt(e.target.value);
+            document.getElementById('lightValue').textContent = `${e.target.value}%`;
+            this.updateColorFromHSL();
+        });
+
+        // Color input fields
+        document.getElementById('hexInput').addEventListener('input', (e) => {
+            this.updateColorFromHex(e.target.value);
+        });
+
+        ['redInput', 'greenInput', 'blueInput'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                this.updateColorFromRGB();
+            });
+        });
+
+        ['hueInput', 'satInput', 'lightInput'].forEach(id => {
+            document.getElementById(id).addEventListener('input', () => {
+                this.updateColorFromHSLInputs();
+            });
+        });
+
+        // Eyedropper tool
+        document.getElementById('eyedropperBtn').addEventListener('click', () => {
+            this.activateEyedropper();
+        });
+
+        // Clear recent colors
+        document.getElementById('clearRecentColors').addEventListener('click', () => {
+            this.clearRecentColors();
+        });
+
+        // Load recent colors
+        this.renderRecentColors();
+    }
+
+    openAdvancedColorPicker(colorIndex, currentColor) {
+        this.currentEditingColorIndex = colorIndex;
+        document.getElementById('colorPickerModal').classList.add('show');
+        
+        // Set initial color
+        this.setPickerColor(currentColor);
+        
+        // Focus on hex input
+        setTimeout(() => {
+            document.getElementById('hexInput').focus();
+        }, 100);
+    }
+
+    closeColorPickerModal() {
+        document.getElementById('colorPickerModal').classList.remove('show');
+        this.currentEditingColorIndex = null;
+    }
+
+    setPickerColor(hex) {
+        // Convert hex to HSL
+        const hsl = this.hexToHSL(hex);
+        this.currentPickerColor = hsl;
+        
+        // Update all inputs
+        document.getElementById('hexInput').value = hex;
+        
+        const rgb = this.hexToRGB(hex);
+        document.getElementById('redInput').value = rgb.r;
+        document.getElementById('greenInput').value = rgb.g;
+        document.getElementById('blueInput').value = rgb.b;
+        
+        document.getElementById('hueInput').value = Math.round(hsl.h);
+        document.getElementById('satInput').value = Math.round(hsl.s);
+        document.getElementById('lightInput').value = Math.round(hsl.l);
+        
+        // Update sliders
+        document.getElementById('hueSlider').value = hsl.h;
+        document.getElementById('satSlider').value = hsl.s;
+        document.getElementById('lightSlider').value = hsl.l;
+        
+        // Update slider labels
+        document.getElementById('hueValue').textContent = `${Math.round(hsl.h)}°`;
+        document.getElementById('satValue').textContent = `${Math.round(hsl.s)}%`;
+        document.getElementById('lightValue').textContent = `${Math.round(hsl.l)}%`;
+        
+        // Update preview
+        document.getElementById('colorPreview').style.background = hex;
+        
+        // Update slider backgrounds
+        this.updateSliderBackgrounds();
+    }
+
+    updateColorFromHSL() {
+        const hex = this.HSLToHex(this.currentPickerColor.h, this.currentPickerColor.s, this.currentPickerColor.l);
+        const rgb = this.hexToRGB(hex);
+        
+        // Update inputs
+        document.getElementById('hexInput').value = hex;
+        document.getElementById('redInput').value = rgb.r;
+        document.getElementById('greenInput').value = rgb.g;
+        document.getElementById('blueInput').value = rgb.b;
+        document.getElementById('hueInput').value = Math.round(this.currentPickerColor.h);
+        document.getElementById('satInput').value = Math.round(this.currentPickerColor.s);
+        document.getElementById('lightInput').value = Math.round(this.currentPickerColor.l);
+        
+        // Update preview
+        document.getElementById('colorPreview').style.background = hex;
+        
+        // Update slider backgrounds
+        this.updateSliderBackgrounds();
+    }
+
+    updateColorFromHex(hex) {
+        if (hex.match(/^#[0-9A-Fa-f]{6}$/)) {
+            const hsl = this.hexToHSL(hex);
+            const rgb = this.hexToRGB(hex);
+            
+            this.currentPickerColor = hsl;
+            
+            // Update RGB inputs
+            document.getElementById('redInput').value = rgb.r;
+            document.getElementById('greenInput').value = rgb.g;
+            document.getElementById('blueInput').value = rgb.b;
+            
+            // Update HSL inputs and sliders
+            document.getElementById('hueInput').value = Math.round(hsl.h);
+            document.getElementById('satInput').value = Math.round(hsl.s);
+            document.getElementById('lightInput').value = Math.round(hsl.l);
+            
+            document.getElementById('hueSlider').value = hsl.h;
+            document.getElementById('satSlider').value = hsl.s;
+            document.getElementById('lightSlider').value = hsl.l;
+            
+            document.getElementById('hueValue').textContent = `${Math.round(hsl.h)}°`;
+            document.getElementById('satValue').textContent = `${Math.round(hsl.s)}%`;
+            document.getElementById('lightValue').textContent = `${Math.round(hsl.l)}%`;
+            
+            // Update preview
+            document.getElementById('colorPreview').style.background = hex;
+            
+            // Update slider backgrounds
+            this.updateSliderBackgrounds();
+        }
+    }
+
+    updateColorFromRGB() {
+        const r = parseInt(document.getElementById('redInput').value) || 0;
+        const g = parseInt(document.getElementById('greenInput').value) || 0;
+        const b = parseInt(document.getElementById('blueInput').value) || 0;
+        
+        const hex = this.RGBToHex(r, g, b);
+        this.updateColorFromHex(hex);
+    }
+
+    updateColorFromHSLInputs() {
+        const h = parseInt(document.getElementById('hueInput').value) || 0;
+        const s = parseInt(document.getElementById('satInput').value) || 0;
+        const l = parseInt(document.getElementById('lightInput').value) || 0;
+        
+        this.currentPickerColor = { h, s, l };
+        
+        // Update sliders
+        document.getElementById('hueSlider').value = h;
+        document.getElementById('satSlider').value = s;
+        document.getElementById('lightSlider').value = l;
+        
+        document.getElementById('hueValue').textContent = `${h}°`;
+        document.getElementById('satValue').textContent = `${s}%`;
+        document.getElementById('lightValue').textContent = `${l}%`;
+        
+        this.updateColorFromHSL();
+    }
+
+    updateSliderBackgrounds() {
+        const { h, s, l } = this.currentPickerColor;
+        
+        // Update saturation slider background
+        const satSlider = document.getElementById('satSlider');
+        satSlider.style.background = `linear-gradient(to right, hsl(${h}, 0%, ${l}%), hsl(${h}, 100%, ${l}%))`;
+        
+        // Update lightness slider background
+        const lightSlider = document.getElementById('lightSlider');
+        lightSlider.style.background = `linear-gradient(to right, hsl(${h}, ${s}%, 0%), hsl(${h}, ${s}%, 50%), hsl(${h}, ${s}%, 100%))`;
+    }
+
+    generateColorHarmony(harmonyType) {
+        const { h, s, l } = this.currentPickerColor;
+        let colors = [];
+        
+        switch (harmonyType) {
+            case 'complementary':
+                colors = [
+                    this.HSLToHex(h, s, l),
+                    this.HSLToHex((h + 180) % 360, s, l)
+                ];
+                break;
+            case 'triadic':
+                colors = [
+                    this.HSLToHex(h, s, l),
+                    this.HSLToHex((h + 120) % 360, s, l),
+                    this.HSLToHex((h + 240) % 360, s, l)
+                ];
+                break;
+            case 'analogous':
+                colors = [
+                    this.HSLToHex((h - 30 + 360) % 360, s, l),
+                    this.HSLToHex(h, s, l),
+                    this.HSLToHex((h + 30) % 360, s, l),
+                    this.HSLToHex((h + 60) % 360, s, l)
+                ];
+                break;
+            case 'monochromatic':
+                colors = [
+                    this.HSLToHex(h, s, Math.max(0, l - 30)),
+                    this.HSLToHex(h, s, Math.max(0, l - 15)),
+                    this.HSLToHex(h, s, l),
+                    this.HSLToHex(h, s, Math.min(100, l + 15)),
+                    this.HSLToHex(h, s, Math.min(100, l + 30))
+                ];
+                break;
+        }
+        
+        this.renderHarmonyColors(colors);
+    }
+
+    renderHarmonyColors(colors) {
+        const harmonyPreview = document.getElementById('harmonyPreview');
+        harmonyPreview.innerHTML = '';
+        
+        colors.forEach(color => {
+            const colorDiv = document.createElement('div');
+            colorDiv.className = 'harmony-color';
+            colorDiv.style.background = color;
+            colorDiv.setAttribute('data-hex', color);
+            colorDiv.addEventListener('click', () => {
+                this.setPickerColor(color);
+            });
+            harmonyPreview.appendChild(colorDiv);
+        });
+    }
+
+    applySelectedColor() {
+        if (this.currentEditingColorIndex !== null) {
+            const hex = document.getElementById('hexInput').value;
+            this.colorStops[this.currentEditingColorIndex].color = hex;
+            
+            // Add to recent colors
+            this.addToRecentColors(hex);
+            
+            // Update the gradient
+            this.renderColorStops();
+            this.updateGradient();
+            
+            // Close modal
+            this.closeColorPickerModal();
+            
+            this.showToast('Color applied successfully!');
+        }
+    }
+
+    addToRecentColors(color) {
+        // Remove if already exists
+        this.recentColors = this.recentColors.filter(c => c !== color);
+        
+        // Add to beginning
+        this.recentColors.unshift(color);
+        
+        // Keep only last 20 colors
+        this.recentColors = this.recentColors.slice(0, 20);
+        
+        // Save to localStorage
+        localStorage.setItem('gradientRecentColors', JSON.stringify(this.recentColors));
+        
+        // Re-render recent colors
+        this.renderRecentColors();
+    }
+
+    renderRecentColors() {
+        const recentColorsGrid = document.getElementById('recentColorsGrid');
+        recentColorsGrid.innerHTML = '';
+        
+        this.recentColors.forEach(color => {
+            const colorDiv = document.createElement('div');
+            colorDiv.className = 'recent-color';
+            colorDiv.style.background = color;
+            colorDiv.title = color;
+            colorDiv.addEventListener('click', () => {
+                this.setPickerColor(color);
+            });
+            recentColorsGrid.appendChild(colorDiv);
+        });
+    }
+
+    clearRecentColors() {
+        this.recentColors = [];
+        localStorage.removeItem('gradientRecentColors');
+        this.renderRecentColors();
+        this.showToast('Recent colors cleared!');
+    }
+
+    activateEyedropper() {
+        const btn = document.getElementById('eyedropperBtn');
+        
+        if ('EyeDropper' in window) {
+            const eyeDropper = new EyeDropper();
+            btn.classList.add('active');
+            btn.textContent = 'Click anywhere to pick...';
+            
+            eyeDropper.open().then(result => {
+                this.setPickerColor(result.sRGBHex);
+                this.showToast('Color picked successfully!');
+            }).catch(() => {
+                this.showToast('Eyedropper cancelled', 'error');
+            }).finally(() => {
+                btn.classList.remove('active');
+                btn.innerHTML = '<span class="eyedropper-icon">💧</span> Pick Color from Screen';
+            });
+        } else {
+            this.showToast('Eyedropper not supported in this browser', 'error');
+        }
+    }
+
+    // Color conversion utilities
+    hexToRGB(hex) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return { r, g, b };
+    }
+
+    RGBToHex(r, g, b) {
+        return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    hexToHSL(hex) {
+        const { r, g, b } = this.hexToRGB(hex);
+        return this.RGBToHSL(r, g, b);
+    }
+
+    RGBToHSL(r, g, b) {
+        r /= 255;
+        g /= 255;
+        b /= 255;
+
+        const max = Math.max(r, g, b);
+        const min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
+
+        if (max === min) {
+            h = s = 0;
+        } else {
+            const d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch (max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+
+        return {
+            h: h * 360,
+            s: s * 100,
+            l: l * 100
+        };
+    }
+
+    HSLToHex(h, s, l) {
+        h /= 360;
+        s /= 100;
+        l /= 100;
+
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+
+        let r, g, b;
+
+        if (s === 0) {
+            r = g = b = l;
+        } else {
+            const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            const p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+
+        const toHex = (c) => {
+            const hex = Math.round(c * 255).toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        };
+
+        return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
     }
 
     updateAnimation() {
@@ -241,7 +699,7 @@ class GradientGenerator {
             <button class="remove-stop" data-index="${index}">×</button>
         `;
 
-        // Color input event listener
+        // Color input event listener - Note: Advanced picker is handled in setupColorPickerControls
         const colorInput = stopDiv.querySelector('input[type="color"]');
         colorInput.addEventListener('input', (e) => {
             this.colorStops[index].color = e.target.value;
