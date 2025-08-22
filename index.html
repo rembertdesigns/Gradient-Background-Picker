@@ -63,6 +63,76 @@
                         <p>See how your gradient looks with content</p>
                     </div>
                 </div>
+
+                <!-- Save Favorite Modal -->
+                <div id="saveFavoriteModal" class="save-favorite-modal">
+                    <div class="save-favorite-content">
+                        <div class="save-favorite-header">
+                            <h3>💾 Save Gradient</h3>
+                            <button class="close-modal" id="closeSaveFavorite">×</button>
+                        </div>
+                        
+                        <div class="save-favorite-body">
+                            <div class="gradient-preview-small" id="savePreviewGradient"></div>
+                            
+                            <div class="save-form">
+                                <div class="form-group">
+                                    <label for="gradientNameInput">Gradient Name:</label>
+                                    <input type="text" id="gradientNameInput" placeholder="My awesome gradient" class="gradient-name-input">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="gradientTagsInput">Tags (comma separated):</label>
+                                    <input type="text" id="gradientTagsInput" placeholder="sunset, warm, orange" class="gradient-tags-input">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="collectionSelect">Save to Collection:</label>
+                                    <select id="collectionSelect" class="collection-select">
+                                        <option value="">No Collection</option>
+                                        <!-- Collections will be populated dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="save-favorite-footer">
+                            <button class="save-gradient-btn" id="saveGradientBtn">Save Gradient</button>
+                            <button class="cancel-btn" id="cancelSaveFavorite">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collection Detail Modal -->
+                <div id="collectionModal" class="collection-modal">
+                    <div class="collection-modal-content">
+                        <div class="collection-modal-header">
+                            <h3 id="collectionModalTitle">📁 Collection</h3>
+                            <button class="close-modal" id="closeCollectionModal">×</button>
+                        </div>
+                        
+                        <div class="collection-modal-body">
+                            <div class="collection-actions">
+                                <button class="add-to-collection-btn" id="addCurrentToCollection">
+                                    <span class="plus-icon">+</span>
+                                    Add Current Gradient
+                                </button>
+                                <button class="rename-collection-btn" id="renameCollectionBtn">
+                                    <span class="edit-icon">✏️</span>
+                                    Rename
+                                </button>
+                                <button class="delete-collection-btn" id="deleteCollectionBtn">
+                                    <span class="trash-icon">🗑️</span>
+                                    Delete Collection
+                                </button>
+                            </div>
+                            
+                            <div class="collection-gradients" id="collectionGradients">
+                                <!-- Collection gradients will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- Gradient Controls -->
@@ -206,9 +276,63 @@
 
             <!-- Preset Gradients -->
             <section class="presets-section">
-                <h3>Popular Presets</h3>
-                <div class="presets-grid" id="presetsGrid">
-                    <!-- Presets will be loaded dynamically -->
+                <div class="presets-header">
+                    <h3>Gradient Library</h3>
+                    <div class="library-tabs">
+                        <button class="library-tab-btn active" data-library-tab="presets">Presets</button>
+                        <button class="library-tab-btn" data-library-tab="favorites">Favorites</button>
+                        <button class="library-tab-btn" data-library-tab="collections">Collections</button>
+                    </div>
+                </div>
+
+                <!-- Presets Tab -->
+                <div id="presetsTab" class="library-tab-content active">
+                    <div class="presets-grid" id="presetsGrid">
+                        <!-- Presets will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Favorites Tab -->
+                <div id="favoritesTab" class="library-tab-content">
+                    <div class="favorites-controls">
+                        <button class="save-favorite-btn" id="saveFavoriteBtn">
+                            <span class="star-icon">⭐</span>
+                            Save Current Gradient
+                        </button>
+                        <div class="favorites-search">
+                            <input type="text" id="favoritesSearch" placeholder="Search favorites..." class="search-input">
+                            <button class="clear-favorites-btn" id="clearFavoritesBtn">Clear All</button>
+                        </div>
+                    </div>
+                    <div class="favorites-grid" id="favoritesGrid">
+                        <!-- Favorites will be loaded dynamically -->
+                    </div>
+                    <div class="empty-favorites" id="emptyFavorites" style="display: none;">
+                        <p>No favorite gradients yet!</p>
+                        <p>Save your current gradient to get started.</p>
+                    </div>
+                </div>
+
+                <!-- Collections Tab -->
+                <div id="collectionsTab" class="library-tab-content">
+                    <div class="collections-controls">
+                        <div class="collection-input-group">
+                            <input type="text" id="collectionNameInput" placeholder="Collection name..." class="collection-input">
+                            <button class="create-collection-btn" id="createCollectionBtn">Create Collection</button>
+                        </div>
+                        <div class="import-export-controls">
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                            <button class="import-btn" id="importBtn">📥 Import</button>
+                            <button class="export-btn" id="exportBtn">📤 Export All</button>
+                        </div>
+                    </div>
+                    <div class="collections-grid" id="collectionsGrid">
+                        <!-- Collections will be loaded dynamically -->
+                    </div>
+                    <div class="empty-collections" id="emptyCollections" style="display: none;">
+                        <p>No collections yet!</p>
+                        <p>Create a collection to organize your gradients.</p>
+                    </div>
                 </div>
             </section>
 
