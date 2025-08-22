@@ -105,6 +105,102 @@
                         <!-- Color stops will be added dynamically -->
                     </div>
                     <button id="addColorStop" class="add-stop-btn">+ Add Color Stop</button>
+                    
+                    <!-- Advanced Color Picker Modal -->
+                    <div id="colorPickerModal" class="color-picker-modal">
+                        <div class="color-picker-content">
+                            <div class="color-picker-header">
+                                <h3>🎨 Advanced Color Picker</h3>
+                                <button class="close-modal" id="closeColorPicker">×</button>
+                            </div>
+                            
+                            <div class="color-picker-body">
+                                <!-- Color Harmony Section -->
+                                <div class="color-harmony-section">
+                                    <h4>Color Harmony</h4>
+                                    <div class="harmony-controls">
+                                        <button class="harmony-btn" data-harmony="complementary">Complementary</button>
+                                        <button class="harmony-btn" data-harmony="triadic">Triadic</button>
+                                        <button class="harmony-btn" data-harmony="analogous">Analogous</button>
+                                        <button class="harmony-btn" data-harmony="monochromatic">Monochromatic</button>
+                                    </div>
+                                    <div class="harmony-preview" id="harmonyPreview">
+                                        <!-- Harmony colors will be displayed here -->
+                                    </div>
+                                </div>
+                                
+                                <!-- HSL/HSV Color Picker -->
+                                <div class="advanced-picker-section">
+                                    <h4>Precision Color Control</h4>
+                                    <div class="color-input-grid">
+                                        <div class="color-input-group">
+                                            <label>Hex:</label>
+                                            <input type="text" id="hexInput" placeholder="#000000">
+                                        </div>
+                                        <div class="color-input-group">
+                                            <label>RGB:</label>
+                                            <div class="rgb-inputs">
+                                                <input type="number" id="redInput" min="0" max="255" placeholder="R">
+                                                <input type="number" id="greenInput" min="0" max="255" placeholder="G">
+                                                <input type="number" id="blueInput" min="0" max="255" placeholder="B">
+                                            </div>
+                                        </div>
+                                        <div class="color-input-group">
+                                            <label>HSL:</label>
+                                            <div class="hsl-inputs">
+                                                <input type="number" id="hueInput" min="0" max="360" placeholder="H">
+                                                <input type="number" id="satInput" min="0" max="100" placeholder="S">
+                                                <input type="number" id="lightInput" min="0" max="100" placeholder="L">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Visual HSL Sliders -->
+                                    <div class="hsl-sliders">
+                                        <div class="slider-group">
+                                            <label>Hue: <span id="hueValue">0°</span></label>
+                                            <input type="range" id="hueSlider" min="0" max="360" value="0" class="hue-slider">
+                                        </div>
+                                        <div class="slider-group">
+                                            <label>Saturation: <span id="satValue">0%</span></label>
+                                            <input type="range" id="satSlider" min="0" max="100" value="0" class="sat-slider">
+                                        </div>
+                                        <div class="slider-group">
+                                            <label>Lightness: <span id="lightValue">0%</span></label>
+                                            <input type="range" id="lightSlider" min="0" max="100" value="0" class="light-slider">
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Color Preview -->
+                                    <div class="color-preview" id="colorPreview"></div>
+                                </div>
+                                
+                                <!-- Recent Colors -->
+                                <div class="recent-colors-section">
+                                    <h4>Recent Colors</h4>
+                                    <div class="recent-colors-grid" id="recentColorsGrid">
+                                        <!-- Recent colors will be displayed here -->
+                                    </div>
+                                    <button class="clear-recent-btn" id="clearRecentColors">Clear Recent</button>
+                                </div>
+                                
+                                <!-- Eyedropper Tool -->
+                                <div class="eyedropper-section">
+                                    <h4>Eyedropper Tool</h4>
+                                    <button class="eyedropper-btn" id="eyedropperBtn">
+                                        <span class="eyedropper-icon">💧</span>
+                                        Pick Color from Screen
+                                    </button>
+                                    <p class="eyedropper-note">Click to activate, then click anywhere to pick a color</p>
+                                </div>
+                            </div>
+                            
+                            <div class="color-picker-footer">
+                                <button class="apply-color-btn" id="applyColorBtn">Apply Color</button>
+                                <button class="cancel-btn" id="cancelColorPicker">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
