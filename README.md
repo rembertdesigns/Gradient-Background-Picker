@@ -25,3 +25,36 @@ A powerful, feature-rich gradient generator that lets you create beautiful anima
 - [📜 License](#-license)
 
 ## ✨ Features
+
+### 🎬 Animation System
+- **Multiple Animation Types**: Rotate, Shift, Pulse, and Static options
+- **Speed Control**: Adjustable animation speed from 0.5x to 5x
+- **Direction Control**: Forward and reverse animations
+- **Real-time Preview**: See animations as you create them
+
+### 🎨 Advanced Color Management
+- **Unlimited Color Stops**: Add as many gradient stops as needed
+- **Advanced Color Picker**: HSL sliders, RGB inputs, hex values
+- **Color Harmony Generator**: Complementary, triadic, analogous, and monochromatic schemes
+- **Eyedropper Tool**: Pick colors directly from your screen (supported browsers)
+- **Recent Colors**: Automatic tracking of recently used colors
+
+### 🗂️ Gradient Library
+- **Favorites System**: Save and organize your best gradients
+- **Collections**: Group gradients by project or theme
+- **Search & Filter**: Find gradients quickly with tags and names
+- **Import/Export**: Share gradient libraries with others
+- **12 Built-in Presets**: Professional gradient starting points
+
+### 🔧 Professional Tools
+- **Multiple Gradient Types**: Linear, radial, and conic gradients
+- **Full Control**: Adjust angles, positions, and color stops precisely
+- **Live Demos**: See how gradients look on cards, buttons, and text
+- **Share URLs**: Generate shareable links with all gradient settings
+
+### 📤 Export Options
+- **CSS**: Standard CSS with animation keyframes
+- **Tailwind**: Tailwind CSS classes and utilities
+- **React**: JSX-ready style objects
+- **SCSS**: Variables and mixins for Sass projects
+- **PNG/SVG Downloads**: High-quality image exports
