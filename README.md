@@ -1,6 +1,9 @@
 # 🎨 Advanced Gradient Generator
 
-A powerful, feature-rich gradient generator that lets you create beautiful animated multi-color gradients for your web projects. Built with vanilla JavaScript, this tool offers professional-grade features including animations, advanced color picker, gradient library management, and multiple export formats.
+A powerful, feature-rich gradient generator that lets you create beautiful animated multi-color gradients for your web projects. Built with vanilla JavaScript, this tool offers professional-grade features including animations, advanced color picker, gradient library management, and multiple export 
+formats.
+
+---
 
 ## 📸 Screenshots
 
@@ -9,6 +12,8 @@ A powerful, feature-rich gradient generator that lets you create beautiful anima
 
 ![Advanced Color Picker](https://via.placeholder.com/600x400/764ba2/ffffff?text=Advanced+Color+Picker)
 *Advanced color picker with HSL controls, harmony generator, and eyedropper tool*
+
+---
 
 ## 📋 Table of Contents
 
@@ -23,6 +28,8 @@ A powerful, feature-rich gradient generator that lets you create beautiful anima
 - [🗺️ Roadmap](#️-roadmap)
 - [🤝 Contributing](#-contributing)
 - [📜 License](#-license)
+
+---
 
 ## ✨ Features
 
@@ -58,3 +65,14 @@ A powerful, feature-rich gradient generator that lets you create beautiful anima
 - **React**: JSX-ready style objects
 - **SCSS**: Variables and mixins for Sass projects
 - **PNG/SVG Downloads**: High-quality image exports
+
+---
+
+## 🚀 Getting Started
+
+### Quick Start
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/rembertdesigns/gradient-generator.git
+   cd gradient-generator
+   ```
