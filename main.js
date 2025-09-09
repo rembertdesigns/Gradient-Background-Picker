@@ -1527,3 +1527,389 @@ class GradientGenerator {
 
     hexToHSL(hex) {
         const { r, g, b } = this.hexToRGB(hex);
+        const rNorm = r / 255;
+        const gNorm = g / 255;
+        const bNorm = b / 255;
+
+        const max = Math.max(rNorm, gNorm, bNorm);
+        const min = Math.min(rNorm, gNorm, bNorm);
+        const diff = max - min;
+
+        let h = 0;
+        let s = 0;
+        let l = (max + min) / 2;
+
+        if (diff !== 0) {
+            s = l > 0.5 ? diff / (2 - max - min) : diff / (max + min);
+
+            switch (max) {
+                case rNorm:
+                    h = (gNorm - bNorm) / diff + (gNorm < bNorm ? 6 : 0);
+                    break;
+                case gNorm:
+                    h = (bNorm - rNorm) / diff + 2;
+                    break;
+                case bNorm:
+                    h = (rNorm - gNorm) / diff + 4;
+                    break;
+            }
+            h /= 6;
+        }
+
+        return {
+            h: Math.round(h * 360),
+            s: Math.round(s * 100),
+            l: Math.round(l * 100)
+        };
+    }
+
+    HSLToHex(h, s, l) {
+        h = h / 360;
+        s = s / 100;
+        l = l / 100;
+
+        const hue2rgb = (p, q, t) => {
+            if (t < 0) t += 1;
+            if (t > 1) t -= 1;
+            if (t < 1/6) return p + (q - p) * 6 * t;
+            if (t < 1/2) return q;
+            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+
+        let r, g, b;
+
+        if (s === 0) {
+            r = g = b = l; // achromatic
+        } else {
+            const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+            const p = 2 * l - q;
+            r = hue2rgb(p, q, h + 1/3);
+            g = hue2rgb(p, q, h);
+            b = hue2rgb(p, q, h - 1/3);
+        }
+
+        return this.RGBToHex(
+            Math.round(r * 255),
+            Math.round(g * 255),
+            Math.round(b * 255)
+        );
+    }
+
+    // Tab switching functionality
+    switchTab(tabName) {
+        // Remove active class from all tabs and content
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        // Add active class to selected tab and content
+        document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+        document.getElementById(`${tabName}Tab`).classList.add('active');
+    }
+
+    // Copy to clipboard functionality
+    copyToClipboard(target) {
+        const element = document.getElementById(target);
+        if (element) {
+            element.select();
+            element.setSelectionRange(0, 99999); // For mobile devices
+            
+            navigator.clipboard.writeText(element.value).then(() => {
+                this.showToast('Copied to clipboard!');
+            }).catch(() => {
+                // Fallback for older browsers
+                document.execCommand('copy');
+                this.showToast('Copied to clipboard!');
+            });
+        }
+    }
+
+    // Download functionality
+    downloadImage(format) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = 800;
+        canvas.height = 600;
+        
+        if (format === 'png') {
+            // Create gradient on canvas
+            const gradient = this.createCanvasGradient(ctx, canvas.width, canvas.height);
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Download as PNG
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.download = 'gradient.png';
+                link.href = url;
+                link.click();
+                URL.revokeObjectURL(url);
+                this.showToast('PNG downloaded!');
+            });
+        } else if (format === 'svg') {
+            this.downloadSVG();
+        }
+    }
+
+    createCanvasGradient(ctx, width, height) {
+        let gradient;
+        
+        switch (this.gradientType) {
+            case 'linear':
+                const angle = (this.gradientAngle - 90) * Math.PI / 180;
+                const x1 = width / 2 + Math.cos(angle) * width / 2;
+                const y1 = height / 2 + Math.sin(angle) * height / 2;
+                const x2 = width / 2 - Math.cos(angle) * width / 2;
+                const y2 = height / 2 - Math.sin(angle) * height / 2;
+                gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+                break;
+            case 'radial':
+                gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.min(width, height)/2);
+                break;
+            case 'conic':
+                // Canvas doesn't support conic gradients natively, fallback to radial
+                gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.min(width, height)/2);
+                break;
+            default:
+                gradient = ctx.createLinearGradient(0, 0, width, 0);
+        }
+        
+        this.colorStops.forEach(stop => {
+            gradient.addColorStop(stop.position / 100, stop.color);
+        });
+        
+        return gradient;
+    }
+
+    downloadSVG() {
+        const stops = this.colorStops
+            .sort((a, b) => a.position - b.position)
+            .map(stop => `<stop offset="${stop.position}%" stop-color="${stop.color}" />`)
+            .join('\n        ');
+
+        let gradientDef;
+        switch (this.gradientType) {
+            case 'linear':
+                const x1 = Math.cos((this.gradientAngle - 90) * Math.PI / 180) * 50 + 50;
+                const y1 = Math.sin((this.gradientAngle - 90) * Math.PI / 180) * 50 + 50;
+                const x2 = 100 - x1;
+                const y2 = 100 - y1;
+                gradientDef = `<linearGradient id="gradient" x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%">
+        ${stops}
+    </linearGradient>`;
+                break;
+            case 'radial':
+                gradientDef = `<radialGradient id="gradient" cx="50%" cy="50%" r="50%">
+        ${stops}
+    </radialGradient>`;
+                break;
+            case 'conic':
+                // SVG doesn't support conic gradients natively, fallback to radial
+                gradientDef = `<radialGradient id="gradient" cx="50%" cy="50%" r="50%">
+        ${stops}
+    </radialGradient>`;
+                break;
+        }
+
+        const svgContent = `<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        ${gradientDef}
+    </defs>
+    <rect width="100%" height="100%" fill="url(#gradient)" />
+</svg>`;
+
+        const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.download = 'gradient.svg';
+        link.href = url;
+        link.click();
+        URL.revokeObjectURL(url);
+        this.showToast('SVG downloaded!');
+    }
+
+    // Share functionality
+    generateShareLink() {
+        const params = new URLSearchParams();
+        params.set('type', this.gradientType);
+        params.set('angle', this.gradientAngle);
+        params.set('position', this.radialPosition);
+        params.set('animation', this.animationType);
+        params.set('speed', this.animationSpeed);
+        params.set('direction', this.animationDirection);
+        params.set('stops', JSON.stringify(this.colorStops));
+        
+        const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+        
+        if (navigator.share) {
+            navigator.share({
+                title: 'Check out this gradient!',
+                url: shareUrl
+            }).then(() => {
+                this.showToast('Shared successfully!');
+            }).catch(() => {
+                this.copyShareLink(shareUrl);
+            });
+        } else {
+            this.copyShareLink(shareUrl);
+        }
+    }
+
+    copyShareLink(url) {
+        navigator.clipboard.writeText(url).then(() => {
+            this.showToast('Share link copied to clipboard!');
+        }).catch(() => {
+            // Fallback
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            this.showToast('Share link copied to clipboard!');
+        });
+    }
+
+    // Load from URL functionality
+    loadFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        
+        if (params.has('stops')) {
+            try {
+                const stops = JSON.parse(params.get('stops'));
+                if (Array.isArray(stops) && stops.length > 0) {
+                    this.colorStops = stops;
+                }
+            } catch (e) {
+                console.warn('Invalid stops parameter in URL');
+            }
+        }
+        
+        if (params.has('type')) {
+            this.gradientType = params.get('type');
+            document.getElementById('gradientType').value = this.gradientType;
+        }
+        
+        if (params.has('angle')) {
+            this.gradientAngle = parseInt(params.get('angle'));
+            document.getElementById('gradientAngle').value = this.gradientAngle;
+            document.getElementById('angleValue').textContent = `${this.gradientAngle}deg`;
+        }
+        
+        if (params.has('position')) {
+            this.radialPosition = params.get('position');
+            document.getElementById('radialPosition').value = this.radialPosition;
+        }
+        
+        if (params.has('animation')) {
+            this.animationType = params.get('animation');
+            document.querySelectorAll('[data-type]').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-type="${this.animationType}"]`)?.classList.add('active');
+        }
+        
+        if (params.has('speed')) {
+            this.animationSpeed = parseFloat(params.get('speed'));
+            document.getElementById('animationSpeed').value = this.animationSpeed;
+            document.getElementById('speedValue').textContent = `${this.animationSpeed}x`;
+        }
+        
+        if (params.has('direction')) {
+            this.animationDirection = params.get('direction');
+            document.querySelectorAll('[data-direction]').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-direction="${this.animationDirection}"]`)?.classList.add('active');
+        }
+        
+        this.isPlaying = this.animationType !== 'none';
+        this.toggleControls();
+        this.renderColorStops();
+        this.updateGradient();
+        
+        if (params.size > 0) {
+            this.showToast('Gradient loaded from URL!');
+        }
+    }
+
+    // Toast notification system
+    showToast(message, type = 'success') {
+        // Remove existing toasts
+        const existingToasts = document.querySelectorAll('.toast');
+        existingToasts.forEach(toast => toast.remove());
+        
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        
+        // Style the toast
+        Object.assign(toast.style, {
+            position: 'fixed',
+            top: '20px',
+            right: '20px',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            color: 'white',
+            fontWeight: '500',
+            zIndex: '10000',
+            animation: 'slideInRight 0.3s ease-out',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.2)',
+            backgroundColor: type === 'error' ? '#ef4444' : '#22c55e'
+        });
+        
+        document.body.appendChild(toast);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            toast.style.animation = 'slideOutRight 0.3s ease-in';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+}
+
+// Initialize the gradient generator when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new GradientGenerator();
+});
+
+// Add CSS animations for toasts and gradient animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+    
+    @keyframes rotateGradient {
+        0% { filter: hue-rotate(0deg); }
+        100% { filter: hue-rotate(360deg); }
+    }
+    
+    @keyframes shiftGradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    
+    @keyframes pulseGradient {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.05); }
+    }
+    
+    .rotate-animation.animated {
+        animation: rotateGradient var(--animation-duration, 3s) linear infinite var(--animation-direction, normal);
+    }
+    
+    .shift-animation.animated {
+        animation: shiftGradient var(--animation-duration, 3s) ease-in-out infinite var(--animation-direction, normal);
+    }
+    
+    .pulse-animation.animated {
+        animation: pulseGradient var(--animation-duration, 3s) ease-in-out infinite var(--animation-direction, normal);
+    }
+`;
+document.head.appendChild(style);
