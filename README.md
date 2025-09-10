@@ -76,3 +76,14 @@ formats.
    git clone https://github.com/rembertdesigns/gradient-generator.git
    cd gradient-generator
    ```
+2. **Open in browser**
+```bash
+# Simply open index.html in your browser
+open index.html
+# or
+python -m http.server 8000  # For local development server
+```
+3. **Start creating!**
+- Adjust color stops by clicking on color inputs
+- Change gradient type and angle
+- Add animations and export your creation
