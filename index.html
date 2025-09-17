@@ -208,6 +208,52 @@
     </div>
 </section>
 
+<!-- Advanced Texture Section -->
+<section class="texture-section">
+    <h3>🎭 Advanced Textures</h3>
+    
+    <div class="texture-controls">
+        <!-- Texture Type -->
+        <div class="texture-control-group">
+            <label for="textureType">Texture Type:</label>
+            <select id="textureType">
+                <option value="none">None</option>
+                <option value="paper">Paper</option>
+                <option value="canvas">Canvas</option>
+                <option value="fabric">Fabric</option>
+                <option value="metal">Metal</option>
+                <option value="glass">Glass</option>
+                <option value="concrete">Concrete</option>
+                <option value="wood">Wood</option>
+            </select>
+        </div>
+        
+        <!-- Texture Intensity -->
+        <div class="texture-control-group">
+            <label for="textureIntensity">Texture Strength: <span id="textureIntensityValue">30%</span></label>
+            <input type="range" id="textureIntensity" min="0" max="100" value="30" step="5">
+        </div>
+        
+        <!-- Custom Texture Upload -->
+        <div class="texture-control-group">
+            <label>Custom Texture:</label>
+            <div class="custom-texture-controls">
+                <input type="file" id="customTexture" accept="image/*" style="display: none;">
+                <button class="upload-texture-btn" id="uploadTextureBtn">📁 Upload Texture</button>
+                <button class="clear-texture-btn" id="clearTextureBtn" style="display: none;">🗑️ Clear</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Texture Preview -->
+    <div class="texture-preview" id="texturePreview">
+        <div class="texture-preview-item" data-texture="paper">Paper</div>
+        <div class="texture-preview-item" data-texture="canvas">Canvas</div>
+        <div class="texture-preview-item" data-texture="fabric">Fabric</div>
+        <div class="texture-preview-item" data-texture="metal">Metal</div>
+    </div>
+</section>
+
             <!-- Gradient Library -->
             <section class="presets-section">
                 <div class="presets-header">
