@@ -166,6 +166,48 @@
                 </div>
             </section>
 
+            <!-- Mesh Gradient Section -->
+<section class="mesh-gradient-section">
+    <div class="mesh-header">
+        <h3>🕸️ Mesh Gradient</h3>
+        <div class="mesh-toggle">
+            <label class="toggle-switch">
+                <input type="checkbox" id="meshModeToggle">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Enable Mesh Mode</span>
+            </label>
+        </div>
+    </div>
+    
+    <div id="meshControls" class="mesh-controls" style="display: none;">
+        <div class="mesh-grid-controls">
+            <div class="mesh-control-group">
+                <label for="meshGridSize">Grid Size:</label>
+                <select id="meshGridSize">
+                    <option value="2x2">2×2</option>
+                    <option value="3x3" selected>3×3</option>
+                    <option value="4x4">4×4</option>
+                </select>
+            </div>
+            
+            <div class="mesh-control-group">
+                <button id="randomizeMesh" class="randomize-mesh-btn">🎲 Randomize Colors</button>
+                <button id="resetMesh" class="reset-mesh-btn">↻ Reset Grid</button>
+            </div>
+        </div>
+        
+        <!-- Mesh Grid Container -->
+        <div class="mesh-grid-container">
+            <div id="meshGrid" class="mesh-grid">
+                <!-- Mesh points will be generated dynamically -->
+            </div>
+            <div class="mesh-instructions">
+                <p>💡 Click on grid points to change colors</p>
+            </div>
+        </div>
+    </div>
+</section>
+
             <!-- Gradient Library -->
             <section class="presets-section">
                 <div class="presets-header">
