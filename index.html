@@ -266,6 +266,50 @@
     </div>
 </section>
 
+<!-- Gradient Mask Section -->
+<section class="mask-section">
+    <h3>🎭 Gradient Masks</h3>
+    
+    <div class="mask-controls">
+        <div class="mask-control-group">
+            <label for="maskType">Mask Type:</label>
+            <select id="maskType">
+                <option value="none">No Mask</option>
+                <option value="circle">Circle</option>
+                <option value="ellipse">Ellipse</option>
+                <option value="polygon">Polygon</option>
+                <option value="heart">Heart</option>
+                <option value="star">Star</option>
+                <option value="custom">Custom Path</option>
+            </select>
+        </div>
+        
+        <div class="mask-control-group">
+            <label for="maskSize">Mask Size: <span id="maskSizeValue">80%</span></label>
+            <input type="range" id="maskSize" min="20" max="100" value="80" step="5">
+        </div>
+        
+        <div class="mask-control-group">
+            <label for="maskBlur">Edge Blur: <span id="maskBlurValue">0px</span></label>
+            <input type="range" id="maskBlur" min="0" max="50" value="0" step="1">
+        </div>
+        
+        <div class="mask-control-group" id="customMaskGroup" style="display: none;">
+            <label>Custom SVG Path:</label>
+            <textarea id="customMaskPath" placeholder="Enter SVG path data..." rows="3"></textarea>
+        </div>
+    </div>
+    
+    <!-- Mask Presets -->
+    <div class="mask-presets">
+        <div class="mask-preset" data-mask="circle">⭕</div>
+        <div class="mask-preset" data-mask="heart">❤️</div>
+        <div class="mask-preset" data-mask="star">⭐</div>
+        <div class="mask-preset" data-mask="diamond">💎</div>
+        <div class="mask-preset" data-mask="hexagon">⬡</div>
+    </div>
+</section>
+
             <!-- Gradient Library -->
             <section class="presets-section">
                 <div class="presets-header">
