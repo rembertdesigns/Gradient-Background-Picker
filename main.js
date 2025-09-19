@@ -683,3 +683,73 @@ renderMeshGrid() {
     const [rows, cols] = this.meshGridSize.split('x').map(Number);
     
     meshGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+    meshGrid.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+    meshGrid.innerHTML = '';
+    
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            const point = document.createElement('div');
+            point.className = 'mesh-point';
+            point.style.background = this.meshColors[i][j];
+            point.style.borderRadius = '50%';
+            point.style.cursor = 'pointer';
+            point.style.border = '2px solid white';
+            point.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)';
+            point.style.transition = 'all 0.2s ease';
+            
+            point.addEventListener('click', () => {
+                this.openMeshColorPicker(i, j);
+            });
+            
+            point.addEventListener('mouseenter', () => {
+                point.style.transform = 'scale(1.2)';
+            });
+            
+            point.addEventListener('mouseleave', () => {
+                point.style.transform = 'scale(1)';
+            });
+            
+            meshGrid.appendChild(point);
+        }
+    }
+}
+
+// ADD NEW METHOD: Open Mesh Color Picker
+openMeshColorPicker(row, col) {
+    const input = document.createElement('input');
+    input.type = 'color';
+    input.value = this.meshColors[row][col];
+    input.style.display = 'none';
+    document.body.appendChild(input);
+    
+    input.addEventListener('change', (e) => {
+        this.meshColors[row][col] = e.target.value;
+        this.renderMeshGrid();
+        this.updateGradient();
+        document.body.removeChild(input);
+    });
+    
+    input.click();
+}
+
+// ADD NEW METHOD: Generate Mesh Gradient CSS
+generateMeshGradientCSS() {
+    if (!this.meshMode || !this.meshColors.length) {
+        return this.generateGradientCSS();
+    }
+    
+    const [rows, cols] = this.meshGridSize.split('x').map(Number);
+    
+    // Create a complex radial gradient mimicking mesh gradient
+    let gradients = [];
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            const x = (j / (cols - 1)) * 100;
+            const y = (i / (rows - 1)) * 100;
+            const size = Math.min(100 / cols, 100 / rows) * 2;
+            gradients.push(`radial-gradient(circle at ${x}% ${y}%, ${this.meshColors[i][j]} 0%, transparent ${size}%)`);
+        }
+    }
+    
+    return gradients.join(', ');
+}
