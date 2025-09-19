@@ -1120,3 +1120,182 @@ loadGradient(gradientData) {
     
     this.showToast(`Loaded "${gradientData.name}"!`);
 }
+
+// UPDATE THIS EXISTING METHOD: Add enhanced features to random generation
+generateRandomGradient() {
+    const numColors = Math.floor(Math.random() * 3) + 2; // 2-4 colors
+    this.colorStops = [];
+
+    for (let i = 0; i < numColors; i++) {
+        const color = this.generateRandomColor();
+        const position = i === 0 ? 0 : i === numColors - 1 ? 100 : Math.floor(Math.random() * 80) + 10;
+        this.colorStops.push({ color, position });
+    }
+
+    // Sort by position
+    this.colorStops.sort((a, b) => a.position - b.position);
+    
+    // Adjust positions to be evenly distributed if they're too close
+    this.colorStops.forEach((stop, index) => {
+        if (index > 0 && index < this.colorStops.length - 1) {
+            stop.position = Math.floor((index / (this.colorStops.length - 1)) * 100);
+        }
+    });
+
+    // Random gradient type and angle
+    const types = ['linear', 'radial', 'conic'];
+    this.gradientType = types[Math.floor(Math.random() * types.length)];
+    this.gradientAngle = Math.floor(Math.random() * 360);
+
+    // Random animation
+    const animationTypes = ['none', 'rotate', 'shift', 'pulse'];
+    this.animationType = animationTypes[Math.floor(Math.random() * animationTypes.length)];
+    this.isPlaying = this.animationType !== 'none';
+
+    // Random pattern
+    const patterns = ['none', 'noise', 'stripes', 'dots', 'waves'];
+    this.currentPattern = patterns[Math.floor(Math.random() * patterns.length)];
+    this.patternIntensity = Math.floor(Math.random() * 50) + 25;
+
+    // Random mesh mode
+    this.meshMode = Math.random() > 0.7;
+    if (this.meshMode) {
+        this.generateMeshGrid();
+        this.renderMeshGrid();
+    }
+
+    // Update UI
+    document.getElementById('gradientType').value = this.gradientType;
+    document.getElementById('gradientAngle').value = this.gradientAngle;
+    document.getElementById('angleValue').textContent = `${this.gradientAngle}deg`;
+    
+    // Update animation UI
+    document.querySelectorAll('[data-type]').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-type="${this.animationType}"]`).classList.add('active');
+
+    // Update pattern UI
+    document.querySelectorAll('.pattern-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-pattern="${this.currentPattern}"]`)?.classList.add('active');
+    document.getElementById('patternIntensity').value = this.patternIntensity;
+    document.getElementById('intensityValue').textContent = `${this.patternIntensity}%`;
+
+    // Update mesh UI
+    document.getElementById('meshModeToggle').checked = this.meshMode;
+    document.getElementById('meshControls').style.display = this.meshMode ? 'block' : 'none';
+
+    this.toggleControls();
+    this.renderColorStops();
+    this.updateGradient();
+    this.updatePatternOverlay();
+    this.showToast('Random enhanced gradient generated!');
+}
+
+// UPDATE THIS EXISTING METHOD: Add mesh support to canvas gradient creation
+createCanvasGradient(ctx, width, height) {
+    let gradient;
+    
+    if (this.meshMode) {
+        // For mesh gradients, create a complex radial gradient
+        const [rows, cols] = this.meshGridSize.split('x').map(Number);
+        gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.min(width, height)/2);
+        
+        // Add color stops from mesh
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                const position = (i * cols + j) / (rows * cols);
+                gradient.addColorStop(position, this.meshColors[i][j]);
+            }
+        }
+    } else {
+        switch (this.gradientType) {
+            case 'linear':
+                const angle = (this.gradientAngle - 90) * Math.PI / 180;
+                const x1 = width / 2 + Math.cos(angle) * width / 2;
+                const y1 = height / 2 + Math.sin(angle) * height / 2;
+                const x2 = width / 2 - Math.cos(angle) * width / 2;
+                const y2 = height / 2 - Math.sin(angle) * height / 2;
+                gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+                break;
+            case 'radial':
+                gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.min(width, height)/2);
+                break;
+            case 'conic':
+                // Canvas doesn't support conic gradients natively, fallback to radial
+                gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, Math.min(width, height)/2);
+                break;
+            default:
+                gradient = ctx.createLinearGradient(0, 0, width, 0);
+        }
+        
+        this.colorStops.forEach(stop => {
+            gradient.addColorStop(stop.position / 100, stop.color);
+        });
+    }
+    
+    return gradient;
+}
+
+// UPDATE THIS EXISTING METHOD: Add mesh support to SVG download
+downloadSVG() {
+    const stops = this.colorStops
+        .sort((a, b) => a.position - b.position)
+        .map(stop => `<stop offset="${stop.position}%" stop-color="${stop.color}" />`)
+        .join('\n        ');
+
+    let gradientDef;
+    if (this.meshMode) {
+        // For mesh gradients, create multiple radial gradients
+        const [rows, cols] = this.meshGridSize.split('x').map(Number);
+        let meshGradients = '';
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                const x = (j / (cols - 1)) * 100;
+                const y = (i / (rows - 1)) * 100;
+                meshGradients += `<radialGradient id="mesh${i}${j}" cx="${x}%" cy="${y}%" r="30%">
+    <stop offset="0%" stop-color="${this.meshColors[i][j]}" />
+    <stop offset="100%" stop-color="${this.meshColors[i][j]}" stop-opacity="0" />
+</radialGradient>\n    `;
+            }
+        }
+        gradientDef = meshGradients;
+    } else {
+        switch (this.gradientType) {
+            case 'linear':
+                const x1 = Math.cos((this.gradientAngle - 90) * Math.PI / 180) * 50 + 50;
+                const y1 = Math.sin((this.gradientAngle - 90) * Math.PI / 180) * 50 + 50;
+                const x2 = 100 - x1;
+                const y2 = 100 - y1;
+                gradientDef = `<linearGradient id="gradient" x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%">
+    ${stops}
+</linearGradient>`;
+                break;
+            case 'radial':
+                gradientDef = `<radialGradient id="gradient" cx="50%" cy="50%" r="50%">
+    ${stops}
+</radialGradient>`;
+                break;
+            case 'conic':
+                // SVG doesn't support conic gradients natively, fallback to radial
+                gradientDef = `<radialGradient id="gradient" cx="50%" cy="50%" r="50%">
+    ${stops}
+</radialGradient>`;
+                break;
+        }
+    }
+
+    const svgContent = `<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+<defs>
+    ${gradientDef}
+</defs>
+<rect width="100%" height="100%" fill="url(#gradient)" />
+</svg>`;
+
+    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = 'enhanced-gradient.svg';
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+    this.showToast('Enhanced SVG downloaded!');
+}
