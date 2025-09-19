@@ -460,3 +460,186 @@ generateTextureDataUrl() {
     
     return canvas.toDataURL();
 }
+
+// ADD NEW METHOD: Generate Paper Texture
+generatePaperTexture(ctx, width, height) {
+    // Base paper color
+    ctx.fillStyle = '#f8f8f8';
+    ctx.fillRect(0, 0, width, height);
+    
+    // Add noise for paper texture
+    const imageData = ctx.createImageData(width, height);
+    const data = imageData.data;
+    
+    for (let i = 0; i < data.length; i += 4) {
+        const noise = (Math.random() - 0.5) * 30;
+        data[i] = 248 + noise;     // Red
+        data[i + 1] = 248 + noise; // Green
+        data[i + 2] = 248 + noise; // Blue
+        data[i + 3] = 255;         // Alpha
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+}
+
+// ADD NEW METHOD: Generate Canvas Texture
+generateCanvasTexture(ctx, width, height) {
+    ctx.fillStyle = '#f5f5f5';
+    ctx.fillRect(0, 0, width, height);
+    
+    // Create canvas weave pattern
+    ctx.strokeStyle = '#e0e0e0';
+    ctx.lineWidth = 0.5;
+    
+    for (let i = 0; i < width; i += 2) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, height);
+        ctx.stroke();
+    }
+    
+    for (let i = 0; i < height; i += 2) {
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(width, i);
+        ctx.stroke();
+    }
+}
+
+// ADD NEW METHOD: Generate Fabric Texture
+generateFabricTexture(ctx, width, height) {
+    ctx.fillStyle = '#f0f0f0';
+    ctx.fillRect(0, 0, width, height);
+    
+    // Create fabric weave
+    for (let x = 0; x < width; x += 4) {
+        for (let y = 0; y < height; y += 4) {
+            ctx.fillStyle = Math.random() > 0.5 ? '#e8e8e8' : '#f8f8f8';
+            ctx.fillRect(x, y, 2, 2);
+        }
+    }
+}
+
+// ADD NEW METHOD: Generate Metal Texture
+generateMetalTexture(ctx, width, height) {
+    // Create metallic gradient
+    const gradient = ctx.createLinearGradient(0, 0, width, height);
+    gradient.addColorStop(0, '#c0c0c0');
+    gradient.addColorStop(0.5, '#e0e0e0');
+    gradient.addColorStop(1, '#a0a0a0');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+    
+    // Add metallic shine lines
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 1;
+    
+    for (let i = 0; i < width; i += 10) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i + height/2, height);
+        ctx.stroke();
+    }
+}
+
+// ADD NEW METHOD: Generate Glass Texture
+generateGlassTexture(ctx, width, height) {
+    const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width/2);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 0.3)');
+    gradient.addColorStop(0.7, 'rgba(255, 255, 255, 0.1)');
+    gradient.addColorStop(1, 'rgba(255, 255, 255, 0.05)');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+}
+
+// ADD NEW METHOD: Generate Concrete Texture
+generateConcreteTexture(ctx, width, height) {
+    ctx.fillStyle = '#d0d0d0';
+    ctx.fillRect(0, 0, width, height);
+    
+    // Add random concrete spots
+    for (let i = 0; i < 50; i++) {
+        const x = Math.random() * width;
+        const y = Math.random() * height;
+        const size = Math.random() * 3 + 1;
+        const opacity = Math.random() * 0.3 + 0.1;
+        
+        ctx.fillStyle = `rgba(160, 160, 160, ${opacity})`;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+// ADD NEW METHOD: Generate Wood Texture
+generateWoodTexture(ctx, width, height) {
+    // Create wood grain
+    const gradient = ctx.createLinearGradient(0, 0, 0, height);
+    gradient.addColorStop(0, '#deb887');
+    gradient.addColorStop(0.5, '#d2b48c');
+    gradient.addColorStop(1, '#cd853f');
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, width, height);
+    
+    // Add wood grain lines
+    ctx.strokeStyle = 'rgba(139, 69, 19, 0.3)';
+    ctx.lineWidth = 0.5;
+    
+    for (let y = 0; y < height; y += Math.random() * 8 + 4) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        for (let x = 0; x < width; x++) {
+            const waveY = y + Math.sin(x * 0.1) * 2;
+            ctx.lineTo(x, waveY);
+        }
+        ctx.stroke();
+    }
+}
+
+// ADD NEW METHOD: Update Mask Overlay
+updateMaskOverlay() {
+    const preview = document.getElementById('patternOverlayPreview');
+    
+    if (this.maskType === 'none') {
+        preview.style.clipPath = 'none';
+        preview.style.filter = 'none';
+        return;
+    }
+    
+    let clipPath = '';
+    const size = this.maskSize;
+    
+    switch(this.maskType) {
+        case 'circle':
+            clipPath = `circle(${size/2}% at 50% 50%)`;
+            break;
+        case 'ellipse':
+            clipPath = `ellipse(${size/2}% ${size/2.5}% at 50% 50%)`;
+            break;
+        case 'polygon':
+            clipPath = `polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)`;
+            break;
+        case 'heart':
+            clipPath = `path('M12,21.35l-1.45-1.32C5.4,15.36,2,12.28,2,8.5 C2,5.42,4.42,3,7.5,3c1.74,0,3.41,0.81,4.5,2.09C13.09,3.81,14.76,3,16.5,3 C19.58,3,22,5.42,22,8.5c0,3.78-3.4,6.86-8.55,11.54L12,21.35z')`;
+            break;
+        case 'star':
+            clipPath = `polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)`;
+            break;
+        case 'custom':
+            if (this.customMaskPath) {
+                clipPath = `path('${this.customMaskPath}')`;
+            }
+            break;
+    }
+    
+    preview.style.clipPath = clipPath;
+    
+    if (this.maskBlur > 0) {
+        preview.style.filter = `blur(${this.maskBlur}px)`;
+    } else {
+        preview.style.filter = 'none';
+    }
+}
