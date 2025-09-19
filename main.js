@@ -753,3 +753,158 @@ generateMeshGradientCSS() {
     
     return gradients.join(', ');
 }
+
+// UPDATE THIS EXISTING METHOD: Add support for new elements
+updateAnimation() {
+    const preview = document.getElementById('gradientPreview');
+    const patternPreview = document.getElementById('patternOverlayPreview');
+    const body = document.body;
+    
+    // Remove all animation classes
+    [preview, patternPreview, body].forEach(element => {
+        if (element) {
+            element.classList.remove('rotate-animation', 'shift-animation', 'pulse-animation', 'animated');
+        }
+    });
+    
+    if (this.animationType !== 'none' && this.isPlaying) {
+        // Set CSS variables for animation
+        const duration = `${3 / this.animationSpeed}s`;
+        document.documentElement.style.setProperty('--animation-duration', duration);
+        document.documentElement.style.setProperty('--animation-direction', this.animationDirection);
+        
+        // Add appropriate animation class
+        const animationClass = `${this.animationType}-animation`;
+        [preview, patternPreview, body].forEach(element => {
+            if (element) {
+                element.classList.add(animationClass, 'animated');
+            }
+        });
+        
+        // For shift animation, we need to modify the background
+        if (this.animationType === 'shift') {
+            const gradientCSS = this.meshMode ? this.generateMeshGradientCSS() : this.generateGradientCSS();
+            [preview, patternPreview, body].forEach(element => {
+                if (element) {
+                    element.style.background = gradientCSS;
+                    element.style.backgroundSize = '300% 300%';
+                }
+            });
+        }
+    }
+    
+    this.updatePlayPauseButton();
+}
+
+// UPDATE THIS EXISTING METHOD: Add support for mesh mode and pattern preview
+updateGradient() {
+    const gradientCSS = this.meshMode ? this.generateMeshGradientCSS() : this.generateGradientCSS();
+    const preview = document.getElementById('gradientPreview');
+    const patternPreview = document.getElementById('patternOverlayPreview');
+    const body = document.body;
+    
+    // Update preview
+    preview.style.background = gradientCSS;
+    
+    // Update body background
+    body.style.background = gradientCSS;
+    
+    // Update demo elements
+    document.documentElement.style.setProperty('--current-gradient', gradientCSS);
+    
+    // Update pattern preview if active
+    if (patternPreview && document.querySelector('.preview-tab-btn.active')?.dataset.previewTab !== 'gradient') {
+        this.switchPreviewTab(document.querySelector('.preview-tab-btn.active').dataset.previewTab);
+    }
+    
+    // Update export outputs
+    this.updateExportOutputs(gradientCSS);
+    
+    // Reapply animation if active
+    this.updateAnimation();
+}
+
+// UPDATE THIS EXISTING METHOD: Add enhanced features to export
+updateExportOutputs(gradientCSS) {
+    // CSS Output with animation and effects
+    let cssOutput = `background: ${gradientCSS};`;
+    
+    if (this.animationType !== 'none') {
+        const duration = `${3 / this.animationSpeed}s`;
+        cssOutput += `\nanimation: ${this.animationType}Gradient ${duration} ${this.animationType === 'shift' ? 'ease-in-out' : 'linear'} infinite ${this.animationDirection};`;
+        
+        if (this.animationType === 'shift') {
+            cssOutput += `\nbackground-size: 300% 300%;`;
+        }
+    }
+    
+    // Add pattern effects to advanced CSS
+    let advancedCSS = cssOutput;
+    if (this.currentPattern !== 'none') {
+        advancedCSS += `\n/* Pattern overlay effects */`;
+        advancedCSS += `\nbackground-blend-mode: ${this.blendMode};`;
+        advancedCSS += `\nopacity: ${this.blendOpacity / 100};`;
+    }
+    
+    if (this.textureType !== 'none') {
+        advancedCSS += `\n/* Texture overlay */`;
+        advancedCSS += `\nfilter: contrast(1.1) brightness(0.95);`;
+    }
+    
+    if (this.maskType !== 'none') {
+        advancedCSS += `\n/* Mask effects */`;
+        advancedCSS += `\nclip-path: /* Add your mask path */;`;
+        if (this.maskBlur > 0) {
+            advancedCSS += `\nfilter: blur(${this.maskBlur}px);`;
+        }
+    }
+    
+    document.getElementById('cssOutput').value = cssOutput;
+    document.getElementById('advancedOutput').value = advancedCSS;
+
+    // Tailwind Output (simplified conversion)
+    const tailwindClasses = this.generateTailwindClasses();
+    document.getElementById('tailwindOutput').value = tailwindClasses;
+
+    // React Output
+    const reactStyle = this.animationType !== 'none' 
+        ? `background: '${gradientCSS}', backgroundSize: '300% 300%', animation: '${this.animationType}Gradient ${3 / this.animationSpeed}s ${this.animationType === 'shift' ? 'ease-in-out' : 'linear'} infinite ${this.animationDirection}'`
+        : `background: '${gradientCSS}'`;
+        
+    document.getElementById('reactOutput').value = 
+        `<div style={{${reactStyle}}}>\n  Your content here\n</div>`;
+
+    // SCSS Output
+    document.getElementById('scssOutput').value = 
+        `$gradient-primary: ${gradientCSS};\n$animation-duration: ${3 / this.animationSpeed}s;\n$pattern: '${this.currentPattern}';\n$texture: '${this.textureType}';\n\n.gradient-bg {\n  background: $gradient-primary;\n  ${this.animationType !== 'none' ? `animation: ${this.animationType}Gradient $animation-duration ${this.animationType === 'shift' ? 'ease-in-out' : 'linear'} infinite ${this.animationDirection};` : ''}\n}`;
+}
+
+// UPDATE THIS EXISTING METHOD: Add enhanced features to Tailwind output
+generateTailwindClasses() {
+    // This is a simplified conversion - real Tailwind would need more complex logic
+    const direction = this.gradientAngle === 90 ? 'to-r' : 
+                     this.gradientAngle === 180 ? 'to-b' : 
+                     this.gradientAngle === 270 ? 'to-l' : 'to-t';
+    
+    if (this.colorStops.length === 2) {
+        const fromColor = this.convertHexToTailwind(this.colorStops[0].color);
+        const toColor = this.convertHexToTailwind(this.colorStops[1].color);
+        let classes = `bg-gradient-${direction} from-${fromColor} to-${toColor}`;
+        
+        if (this.animationType !== 'none') {
+            classes += `\n/* Add custom animation classes for ${this.animationType} effect */`;
+        }
+        
+        if (this.currentPattern !== 'none') {
+            classes += `\n/* Pattern: ${this.currentPattern} */`;
+        }
+        
+        if (this.meshMode) {
+            classes += `\n/* Mesh gradient mode enabled */`;
+        }
+        
+        return classes;
+    }
+    
+    return `/* Custom gradient - use arbitrary values */\nbg-[${this.generateGradientCSS()}]`;
+}
