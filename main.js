@@ -643,3 +643,43 @@ updateMaskOverlay() {
         preview.style.filter = 'none';
     }
 }
+
+// ADD NEW METHOD: Generate Mesh Grid
+generateMeshGrid(rows = null, cols = null) {
+    if (rows === null || cols === null) {
+        const [r, c] = this.meshGridSize.split('x').map(Number);
+        rows = r;
+        cols = c;
+    }
+    
+    this.meshColors = [];
+    for (let i = 0; i < rows; i++) {
+        this.meshColors[i] = [];
+        for (let j = 0; j < cols; j++) {
+            this.meshColors[i][j] = this.generateRandomColor();
+        }
+    }
+    return this.meshColors;
+}
+
+// ADD NEW METHOD: Reset Mesh Grid
+resetMeshGrid() {
+    const [rows, cols] = this.meshGridSize.split('x').map(Number);
+    this.meshColors = [];
+    for (let i = 0; i < rows; i++) {
+        this.meshColors[i] = [];
+        for (let j = 0; j < cols; j++) {
+            this.meshColors[i][j] = i === 0 && j === 0 ? '#667eea' : 
+                                   i === 0 && j === cols-1 ? '#764ba2' : 
+                                   i === rows-1 && j === 0 ? '#11998e' : 
+                                   i === rows-1 && j === cols-1 ? '#38ef7d' : '#ffffff';
+        }
+    }
+}
+
+// ADD NEW METHOD: Render Mesh Grid
+renderMeshGrid() {
+    const meshGrid = document.getElementById('meshGrid');
+    const [rows, cols] = this.meshGridSize.split('x').map(Number);
+    
+    meshGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
