@@ -52,19 +52,36 @@ class GradientGenerator {
     }
 
     init() {
+        // Core event listeners
         this.setupEventListeners();
         this.setupAnimationControls();
-        // ADD THESE NEW SETUP METHODS TO EXISTING INIT
+        
+        // Enhanced feature setup methods
         this.setupPatternControls();
         this.setupMeshControls();
         this.setupTextureControls();
         this.setupMaskControls();
         this.setupColorPickerControls();
         this.setupLibraryControls();
+        this.setupCollectionModal();
+        
+        // Initialize data and UI
         this.loadPresets();
         this.renderColorStops();
+        this.renderFavorites();
+        this.renderCollections();
         this.updateGradient();
         this.loadFromURL();
+        
+        // Set initial UI state
+        this.toggleControls();
+        this.updatePlayPauseButton();
+        this.updateCollectionSelect();
+        
+        // Initialize pattern/texture overlays
+        this.updatePatternOverlay();
+        this.updateTextureOverlay();
+        this.updateMaskOverlay();
     }
 
     setupPatternControls() {
