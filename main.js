@@ -908,3 +908,215 @@ generateTailwindClasses() {
     
     return `/* Custom gradient - use arbitrary values */\nbg-[${this.generateGradientCSS()}]`;
 }
+
+// UPDATE THIS EXISTING METHOD: Add enhanced properties to gradient name generation
+generateGradientName() {
+    const colorNames = {
+        '#ff': 'Red', '#00ff': 'Green', '#0000ff': 'Blue',
+        '#ffff': 'Yellow', '#ff00ff': 'Magenta', '#00ffff': 'Cyan',
+        '#ffa500': 'Orange', '#800080': 'Purple', '#ffc0cb': 'Pink'
+    };
+    
+    const mainColor = this.colorStops[0].color;
+    const colorName = colorNames[mainColor.toLowerCase()] || 'Custom';
+    
+    const typeNames = {
+        'linear': 'Linear',
+        'radial': 'Radial',
+        'conic': 'Conic'
+    };
+    
+    const timestamp = new Date().toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        hour12: false 
+    });
+    
+    const meshSuffix = this.meshMode ? ' Mesh' : '';
+    
+    return `${colorName} ${typeNames[this.gradientType]}${meshSuffix} ${timestamp}`;
+}
+
+// UPDATE THIS EXISTING METHOD: Add enhanced properties to gradient saving
+saveCurrentGradient() {
+    const name = document.getElementById('gradientNameInput').value.trim();
+    const tagsInput = document.getElementById('gradientTagsInput').value.trim();
+    const collectionId = document.getElementById('collectionSelect').value;
+    
+    if (!name) {
+        this.showToast('Please enter a gradient name', 'error');
+        return;
+    }
+    
+    const tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag) : [];
+    
+    const gradient = {
+        id: Date.now().toString(),
+        name: name,
+        tags: tags,
+        colorStops: [...this.colorStops],
+        gradientType: this.gradientType,
+        gradientAngle: this.gradientAngle,
+        radialPosition: this.radialPosition,
+        animationType: this.animationType,
+        animationSpeed: this.animationSpeed,
+        animationDirection: this.animationDirection,
+        // Enhanced properties
+        currentPattern: this.currentPattern,
+        patternIntensity: this.patternIntensity,
+        patternScale: this.patternScale,
+        blendMode: this.blendMode,
+        blendOpacity: this.blendOpacity,
+        meshMode: this.meshMode,
+        meshGridSize: this.meshGridSize,
+        meshColors: this.meshColors,
+        textureType: this.textureType,
+        textureIntensity: this.textureIntensity,
+        maskType: this.maskType,
+        maskSize: this.maskSize,
+        maskBlur: this.maskBlur,
+        customMaskPath: this.customMaskPath,
+        createdAt: new Date().toISOString(),
+        collectionId: collectionId || null
+    };
+    
+    this.favoriteGradients.push(gradient);
+    this.saveFavorites();
+    
+    // Add to collection if specified
+    if (collectionId && this.gradientCollections[collectionId]) {
+        if (!this.gradientCollections[collectionId].gradients.includes(gradient.id)) {
+            this.gradientCollections[collectionId].gradients.push(gradient.id);
+            this.saveCollections();
+        }
+    }
+    
+    this.renderFavorites();
+    this.renderCollections();
+    this.closeSaveFavoriteModal();
+    this.showToast('Gradient saved successfully!');
+}
+
+// UPDATE THIS EXISTING METHOD: Add support for mesh gradients in CSS generation
+generateGradientCSSFromData(gradientData) {
+    if (gradientData.meshMode && gradientData.meshColors) {
+        // Generate mesh gradient representation
+        const [rows, cols] = (gradientData.meshGridSize || '3x3').split('x').map(Number);
+        let gradients = [];
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                const x = (j / (cols - 1)) * 100;
+                const y = (i / (rows - 1)) * 100;
+                const size = Math.min(100 / cols, 100 / rows) * 2;
+                gradients.push(`radial-gradient(circle at ${x}% ${y}%, ${gradientData.meshColors[i][j]} 0%, transparent ${size}%)`);
+            }
+        }
+        return gradients.join(', ');
+    }
+    
+    const stops = gradientData.colorStops
+        .sort((a, b) => a.position - b.position)
+        .map(stop => `${stop.color} ${stop.position}%`)
+        .join(', ');
+
+    switch (gradientData.gradientType) {
+        case 'linear':
+            return `linear-gradient(${gradientData.gradientAngle}deg, ${stops})`;
+        case 'radial':
+            return `radial-gradient(circle at ${gradientData.radialPosition}, ${stops})`;
+        case 'conic':
+            return `conic-gradient(from 0deg, ${stops})`;
+        default:
+            return `linear-gradient(${gradientData.gradientAngle}deg, ${stops})`;
+    }
+}
+
+// UPDATE THIS EXISTING METHOD: Add enhanced properties loading
+loadGradient(gradientData) {
+    // Load gradient properties
+    this.colorStops = [...gradientData.colorStops];
+    this.gradientType = gradientData.gradientType;
+    this.gradientAngle = gradientData.gradientAngle;
+    this.radialPosition = gradientData.radialPosition;
+    this.animationType = gradientData.animationType || 'none';
+    this.animationSpeed = gradientData.animationSpeed || 1;
+    this.animationDirection = gradientData.animationDirection || 'normal';
+    this.isPlaying = this.animationType !== 'none';
+    
+    // Load enhanced properties
+    this.currentPattern = gradientData.currentPattern || 'none';
+    this.patternIntensity = gradientData.patternIntensity || 50;
+    this.patternScale = gradientData.patternScale || 1;
+    this.blendMode = gradientData.blendMode || 'normal';
+    this.blendOpacity = gradientData.blendOpacity || 100;
+    this.meshMode = gradientData.meshMode || false;
+    this.meshGridSize = gradientData.meshGridSize || '3x3';
+    this.meshColors = gradientData.meshColors || this.generateMeshGrid(3, 3);
+    this.textureType = gradientData.textureType || 'none';
+    this.textureIntensity = gradientData.textureIntensity || 30;
+    this.maskType = gradientData.maskType || 'none';
+    this.maskSize = gradientData.maskSize || 80;
+    this.maskBlur = gradientData.maskBlur || 0;
+    this.customMaskPath = gradientData.customMaskPath || '';
+    
+    // Update UI
+    document.getElementById('gradientType').value = this.gradientType;
+    document.getElementById('gradientAngle').value = this.gradientAngle;
+    document.getElementById('angleValue').textContent = `${this.gradientAngle}deg`;
+    document.getElementById('radialPosition').value = this.radialPosition;
+    
+    // Update animation UI
+    document.querySelectorAll('[data-type]').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-type="${this.animationType}"]`).classList.add('active');
+    
+    document.getElementById('animationSpeed').value = this.animationSpeed;
+    document.getElementById('speedValue').textContent = `${this.animationSpeed}x`;
+    
+    document.querySelectorAll('[data-direction]').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-direction="${this.animationDirection}"]`).classList.add('active');
+    
+    // Update pattern UI
+    document.querySelectorAll('.pattern-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelector(`[data-pattern="${this.currentPattern}"]`)?.classList.add('active');
+    
+    document.getElementById('patternIntensity').value = this.patternIntensity;
+    document.getElementById('intensityValue').textContent = `${this.patternIntensity}%`;
+    document.getElementById('patternScale').value = this.patternScale;
+    document.getElementById('scaleValue').textContent = `${this.patternScale}x`;
+    document.getElementById('blendMode').value = this.blendMode;
+    document.getElementById('blendOpacity').value = this.blendOpacity;
+    document.getElementById('blendOpacityValue').textContent = `${this.blendOpacity}%`;
+    
+    // Update mesh UI
+    document.getElementById('meshModeToggle').checked = this.meshMode;
+    document.getElementById('meshControls').style.display = this.meshMode ? 'block' : 'none';
+    document.getElementById('meshGridSize').value = this.meshGridSize;
+    if (this.meshMode) {
+        this.renderMeshGrid();
+    }
+    
+    // Update texture UI
+    document.getElementById('textureType').value = this.textureType;
+    document.getElementById('textureIntensity').value = this.textureIntensity;
+    document.getElementById('textureIntensityValue').textContent = `${this.textureIntensity}%`;
+    
+    // Update mask UI
+    document.getElementById('maskType').value = this.maskType;
+    document.getElementById('maskSize').value = this.maskSize;
+    document.getElementById('maskSizeValue').textContent = `${this.maskSize}%`;
+    document.getElementById('maskBlur').value = this.maskBlur;
+    document.getElementById('maskBlurValue').textContent = `${this.maskBlur}px`;
+    document.getElementById('customMaskPath').value = this.customMaskPath;
+    document.getElementById('customMaskGroup').style.display = 
+        this.maskType === 'custom' ? 'block' : 'none';
+    
+    // Update controls and render
+    this.toggleControls();
+    this.renderColorStops();
+    this.updateGradient();
+    this.updatePatternOverlay();
+    this.updateTextureOverlay();
+    this.updateMaskOverlay();
+    
+    this.showToast(`Loaded "${gradientData.name}"!`);
+}
