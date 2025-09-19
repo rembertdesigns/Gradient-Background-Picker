@@ -1299,3 +1299,414 @@ downloadSVG() {
     URL.revokeObjectURL(url);
     this.showToast('Enhanced SVG downloaded!');
 }
+
+// UPDATE THIS EXISTING METHOD: Add enhanced parameters to share functionality
+generateShareLink() {
+    const params = new URLSearchParams();
+    params.set('type', this.gradientType);
+    params.set('angle', this.gradientAngle);
+    params.set('position', this.radialPosition);
+    params.set('animation', this.animationType);
+    params.set('speed', this.animationSpeed);
+    params.set('direction', this.animationDirection);
+    params.set('stops', JSON.stringify(this.colorStops));
+    
+    // Enhanced parameters
+    params.set('pattern', this.currentPattern);
+    params.set('patternIntensity', this.patternIntensity);
+    params.set('patternScale', this.patternScale);
+    params.set('blendMode', this.blendMode);
+    params.set('blendOpacity', this.blendOpacity);
+    params.set('meshMode', this.meshMode);
+    params.set('meshGridSize', this.meshGridSize);
+    if (this.meshMode) {
+        params.set('meshColors', JSON.stringify(this.meshColors));
+    }
+    params.set('textureType', this.textureType);
+    params.set('textureIntensity', this.textureIntensity);
+    params.set('maskType', this.maskType);
+    params.set('maskSize', this.maskSize);
+    params.set('maskBlur', this.maskBlur);
+    if (this.customMaskPath) {
+        params.set('customMaskPath', this.customMaskPath);
+    }
+    
+    const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+    document.getElementById('shareUrl').value = shareUrl;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: 'Check out this enhanced gradient!',
+            url: shareUrl
+        }).then(() => {
+            this.showToast('Shared successfully!');
+        }).catch(() => {
+            this.copyShareLink(shareUrl);
+        });
+    } else {
+        this.copyShareLink(shareUrl);
+    }
+}
+
+// UPDATE THIS EXISTING METHOD: Add enhanced parameter loading from URL
+loadFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    
+    if (params.has('stops')) {
+        try {
+            const stops = JSON.parse(params.get('stops'));
+            if (Array.isArray(stops) && stops.length > 0) {
+                this.colorStops = stops;
+            }
+        } catch (e) {
+            console.warn('Invalid stops parameter in URL');
+        }
+    }
+    
+    if (params.has('type')) {
+        this.gradientType = params.get('type');
+        document.getElementById('gradientType').value = this.gradientType;
+    }
+    
+    if (params.has('angle')) {
+        this.gradientAngle = parseInt(params.get('angle'));
+        document.getElementById('gradientAngle').value = this.gradientAngle;
+        document.getElementById('angleValue').textContent = `${this.gradientAngle}deg`;
+    }
+    
+    if (params.has('position')) {
+        this.radialPosition = params.get('position');
+        document.getElementById('radialPosition').value = this.radialPosition;
+    }
+    
+    if (params.has('animation')) {
+        this.animationType = params.get('animation');
+        document.querySelectorAll('[data-type]').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`[data-type="${this.animationType}"]`)?.classList.add('active');
+    }
+    
+    if (params.has('speed')) {
+        this.animationSpeed = parseFloat(params.get('speed'));
+        document.getElementById('animationSpeed').value = this.animationSpeed;
+        document.getElementById('speedValue').textContent = `${this.animationSpeed}x`;
+    }
+    
+    if (params.has('direction')) {
+        this.animationDirection = params.get('direction');
+        document.querySelectorAll('[data-direction]').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`[data-direction="${this.animationDirection}"]`)?.classList.add('active');
+    }
+    
+    // Enhanced parameters
+    if (params.has('pattern')) {
+        this.currentPattern = params.get('pattern');
+        document.querySelectorAll('.pattern-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`[data-pattern="${this.currentPattern}"]`)?.classList.add('active');
+    }
+    
+    if (params.has('patternIntensity')) {
+        this.patternIntensity = parseInt(params.get('patternIntensity'));
+        document.getElementById('patternIntensity').value = this.patternIntensity;
+        document.getElementById('intensityValue').textContent = `${this.patternIntensity}%`;
+    }
+    
+    if (params.has('patternScale')) {
+        this.patternScale = parseFloat(params.get('patternScale'));
+        document.getElementById('patternScale').value = this.patternScale;
+        document.getElementById('scaleValue').textContent = `${this.patternScale}x`;
+    }
+    
+    if (params.has('blendMode')) {
+        this.blendMode = params.get('blendMode');
+        document.getElementById('blendMode').value = this.blendMode;
+    }
+    
+    if (params.has('blendOpacity')) {
+        this.blendOpacity = parseInt(params.get('blendOpacity'));
+        document.getElementById('blendOpacity').value = this.blendOpacity;
+        document.getElementById('blendOpacityValue').textContent = `${this.blendOpacity}%`;
+    }
+    
+    if (params.has('meshMode')) {
+        this.meshMode = params.get('meshMode') === 'true';
+        document.getElementById('meshModeToggle').checked = this.meshMode;
+        document.getElementById('meshControls').style.display = this.meshMode ? 'block' : 'none';
+    }
+    
+    if (params.has('meshGridSize')) {
+        this.meshGridSize = params.get('meshGridSize');
+        document.getElementById('meshGridSize').value = this.meshGridSize;
+    }
+    
+    if (params.has('meshColors')) {
+        try {
+            this.meshColors = JSON.parse(params.get('meshColors'));
+            if (this.meshMode) {
+                this.renderMeshGrid();
+            }
+        } catch (e) {
+            console.warn('Invalid meshColors parameter in URL');
+        }
+    }
+    
+    if (params.has('textureType')) {
+        this.textureType = params.get('textureType');
+        document.getElementById('textureType').value = this.textureType;
+    }
+    
+    if (params.has('textureIntensity')) {
+        this.textureIntensity = parseInt(params.get('textureIntensity'));
+        document.getElementById('textureIntensity').value = this.textureIntensity;
+        document.getElementById('textureIntensityValue').textContent = `${this.textureIntensity}%`;
+    }
+    
+    if (params.has('maskType')) {
+        this.maskType = params.get('maskType');
+        document.getElementById('maskType').value = this.maskType;
+        document.getElementById('customMaskGroup').style.display = 
+            this.maskType === 'custom' ? 'block' : 'none';
+    }
+    
+    if (params.has('maskSize')) {
+        this.maskSize = parseInt(params.get('maskSize'));
+        document.getElementById('maskSize').value = this.maskSize;
+        document.getElementById('maskSizeValue').textContent = `${this.maskSize}%`;
+    }
+    
+    if (params.has('maskBlur')) {
+        this.maskBlur = parseInt(params.get('maskBlur'));
+        document.getElementById('maskBlur').value = this.maskBlur;
+        document.getElementById('maskBlurValue').textContent = `${this.maskBlur}px`;
+    }
+    
+    if (params.has('customMaskPath')) {
+        this.customMaskPath = params.get('customMaskPath');
+        document.getElementById('customMaskPath').value = this.customMaskPath;
+    }
+    
+    this.isPlaying = this.animationType !== 'none';
+    this.toggleControls();
+    this.renderColorStops();
+    this.updateGradient();
+    this.updatePatternOverlay();
+    this.updateTextureOverlay();
+    this.updateMaskOverlay();
+    
+    if (params.size > 0) {
+        this.showToast('Enhanced gradient loaded from URL!');
+    }
+}
+
+// UPDATE THIS EXISTING METHOD: Update export version number
+exportAllGradients() {
+    const exportData = {
+        favorites: this.favoriteGradients,
+        collections: this.gradientCollections,
+        exportedAt: new Date().toISOString(),
+        version: '2.0' // Updated version for enhanced features
+    };
+    
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    const timestamp = new Date().toISOString().slice(0, 10);
+    link.download = `gradient-library-${timestamp}.json`;
+    link.href = url;
+    link.click();
+    
+    URL.revokeObjectURL(url);
+    this.showToast('Enhanced gradient library exported!');
+}
+
+// UPDATE THIS EXISTING METHOD: Add enhanced properties to collection gradient saving
+addCurrentGradientToCollection() {
+    if (!this.currentCollection) return;
+    
+    // First save the current gradient
+    const gradient = {
+        id: Date.now().toString(),
+        name: this.generateGradientName(),
+        tags: [],
+        colorStops: [...this.colorStops],
+        gradientType: this.gradientType,
+        gradientAngle: this.gradientAngle,
+        radialPosition: this.radialPosition,
+        animationType: this.animationType,
+        animationSpeed: this.animationSpeed,
+        animationDirection: this.animationDirection,
+        // Enhanced properties
+        currentPattern: this.currentPattern,
+        patternIntensity: this.patternIntensity,
+        patternScale: this.patternScale,
+        blendMode: this.blendMode,
+        blendOpacity: this.blendOpacity,
+        meshMode: this.meshMode,
+        meshGridSize: this.meshGridSize,
+        meshColors: this.meshColors,
+        textureType: this.textureType,
+        textureIntensity: this.textureIntensity,
+        maskType: this.maskType,
+        maskSize: this.maskSize,
+        maskBlur: this.maskBlur,
+        customMaskPath: this.customMaskPath,
+        createdAt: new Date().toISOString(),
+        collectionId: this.currentCollection.id
+    };
+    
+    this.favoriteGradients.push(gradient);
+    this.currentCollection.gradients.push(gradient.id);
+    
+    this.saveFavorites();
+    this.saveCollections();
+    
+    this.renderCollectionGradients(this.currentCollection);
+    this.renderCollections();
+    this.showToast('Enhanced gradient added to collection!');
+}
+
+// UPDATE THIS EXISTING METHOD: Add enhanced preview to save modal
+openSaveFavoriteModal() {
+    document.getElementById('saveFavoriteModal').classList.add('show');
+    
+    // Update preview with current gradient (including mesh mode)
+    const gradientCSS = this.meshMode ? this.generateMeshGradientCSS() : this.generateGradientCSS();
+    document.getElementById('savePreviewGradient').style.background = gradientCSS;
+    
+    // Generate default name
+    const defaultName = this.generateGradientName();
+    document.getElementById('gradientNameInput').value = defaultName;
+    
+    // Focus on name input
+    setTimeout(() => {
+        document.getElementById('gradientNameInput').focus();
+        document.getElementById('gradientNameInput').select();
+    }, 100);
+}
+
+// COMPLETE SVG DOWNLOAD METHOD FROM BATCH 8
+downloadSVG() {
+    const stops = this.colorStops
+        .sort((a, b) => a.position - b.position)
+        .map(stop => `<stop offset="${stop.position}%" stop-color="${stop.color}" />`)
+        .join('\n        ');
+
+    let gradientDef;
+    if (this.meshMode) {
+        // For mesh gradients, create multiple radial gradients
+        const [rows, cols] = this.meshGridSize.split('x').map(Number);
+        let meshGradients = '';
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                const x = (j / (cols - 1)) * 100;
+                const y = (i / (rows - 1)) * 100;
+                meshGradients += `<radialGradient id="mesh${i}${j}" cx="${x}%" cy="${y}%" r="30%">
+    <stop offset="0%" stop-color="${this.meshColors[i][j]}" />
+    <stop offset="100%" stop-color="${this.meshColors[i][j]}" stop-opacity="0" />
+</radialGradient>\n    `;
+            }
+        }
+        gradientDef = meshGradients;
+    } else {
+        switch (this.gradientType) {
+            case 'linear':
+                const x1 = Math.cos((this.gradientAngle - 90) * Math.PI / 180) * 50 + 50;
+                const y1 = Math.sin((this.gradientAngle - 90) * Math.PI / 180) * 50 + 50;
+                const x2 = 100 - x1;
+                const y2 = 100 - y1;
+                gradientDef = `<linearGradient id="gradient" x1="${x1}%" y1="${y1}%" x2="${x2}%" y2="${y2}%">
+    ${stops}
+</linearGradient>`;
+                break;
+            case 'radial':
+                gradientDef = `<radialGradient id="gradient" cx="50%" cy="50%" r="50%">
+    ${stops}
+</radialGradient>`;
+                break;
+            case 'conic':
+                // SVG doesn't support conic gradients natively, fallback to radial
+                gradientDef = `<radialGradient id="gradient" cx="50%" cy="50%" r="50%">
+    ${stops}
+</radialGradient>`;
+                break;
+        }
+    }
+
+    const svgContent = `<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+<defs>
+    ${gradientDef}
+</defs>
+<rect width="100%" height="100%" fill="url(#gradient)" />
+</svg>`;
+
+    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.download = 'enhanced-gradient.svg';
+    link.href = url;
+    link.click();
+    URL.revokeObjectURL(url);
+    this.showToast('Enhanced SVG downloaded!');
+}
+
+// ADD MISSING GENERATEANDOMCOLOR METHOD (if not already in existing code)
+generateRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+// ENSURE INITIALIZATION CODE IS COMPLETE AT BOTTOM OF FILE
+// (This should be at the very end of your main.js file)
+}
+
+// Initialize the gradient generator when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+new GradientGenerator();
+});
+
+// Add CSS animations for toasts and gradient animations
+const style = document.createElement('style');
+style.textContent = `
+@keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutRight {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+@keyframes rotateGradient {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+@keyframes shiftGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes pulseGradient {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+.rotate-animation.animated {
+    animation: rotateGradient var(--animation-duration, 3s) linear infinite var(--animation-direction, normal);
+}
+
+.shift-animation.animated {
+    animation: shiftGradient var(--animation-duration, 3s) ease-in-out infinite var(--animation-direction, normal);
+}
+
+.pulse-animation.animated {
+    animation: pulseGradient var(--animation-duration, 3s) ease-in-out infinite var(--animation-direction, normal);
+}
+`;
+document.head.appendChild(style);
