@@ -1,5 +1,14 @@
 # 🎨 Advanced Gradient Generator
 
+<img 
+  width="1536" 
+  height="1024" 
+  alt="Advanced Gradient Generator - Powerful web tool for creating animated multi-color CSS gradients with JavaScript, featuring professional color picker and export formats" 
+  title="Advanced Gradient Generator - Professional CSS Gradient Creation Tool"
+  src="https://github.com/user-attachments/assets/16f280df-be89-4318-9389-df960632b34f"
+  loading="lazy"
+/>
+
 A powerful, feature-rich gradient generator that lets you create beautiful animated multi-color gradients for your web projects. Built with vanilla JavaScript, this tool offers professional-grade features including animations, advanced color picker, gradient library management, and multiple export 
 formats.
 
