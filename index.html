@@ -402,3 +402,184 @@
                     <div class="mask-preset" data-mask="hexagon">⬡</div>
                 </div>
             </section>
+
+            <!-- Gradient Library -->
+            <section class="presets-section">
+                <div class="presets-header">
+                    <h3>Gradient Library</h3>
+                    <div class="library-tabs">
+                        <button class="library-tab-btn active" data-library-tab="presets">Presets</button>
+                        <button class="library-tab-btn" data-library-tab="favorites">Favorites</button>
+                        <button class="library-tab-btn" data-library-tab="collections">Collections</button>
+                        <button class="library-tab-btn" data-library-tab="community">Community</button>
+                    </div>
+                </div>
+
+                <!-- Presets Tab -->
+                <div id="presetsTab" class="library-tab-content active">
+                    <div class="presets-filter">
+                        <input type="text" id="presetsSearch" placeholder="Search presets..." class="search-input">
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="warm">Warm</option>
+                            <option value="cool">Cool</option>
+                            <option value="vibrant">Vibrant</option>
+                            <option value="subtle">Subtle</option>
+                            <option value="dark">Dark</option>
+                            <option value="light">Light</option>
+                        </select>
+                    </div>
+                    <div class="presets-grid" id="presetsGrid">
+                        <!-- Presets will be loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Favorites Tab -->
+                <div id="favoritesTab" class="library-tab-content">
+                    <div class="favorites-controls">
+                        <button class="save-favorite-btn" id="saveFavoriteBtn">
+                            <span class="star-icon">⭐</span>
+                            Save Current Gradient
+                        </button>
+                        <div class="favorites-search">
+                            <input type="text" id="favoritesSearch" placeholder="Search favorites..." class="search-input">
+                            <button class="clear-favorites-btn" id="clearFavoritesBtn">Clear All</button>
+                        </div>
+                    </div>
+                    <div class="favorites-grid" id="favoritesGrid">
+                        <!-- Favorites will be loaded dynamically -->
+                    </div>
+                    <div class="empty-favorites" id="emptyFavorites" style="display: none;">
+                        <p>No favorite gradients yet!</p>
+                        <p>Save your current gradient to get started.</p>
+                    </div>
+                </div>
+
+                <!-- Collections Tab -->
+                <div id="collectionsTab" class="library-tab-content">
+                    <div class="collections-controls">
+                        <div class="collection-input-group">
+                            <input type="text" id="collectionNameInput" placeholder="Collection name..." class="collection-input">
+                            <button class="create-collection-btn" id="createCollectionBtn">Create Collection</button>
+                        </div>
+                        <div class="import-export-controls">
+                            <input type="file" id="importFile" accept=".json" style="display: none;">
+                            <button class="import-btn" id="importBtn">📥 Import</button>
+                            <button class="export-btn" id="exportBtn">📤 Export All</button>
+                        </div>
+                    </div>
+                    <div class="collections-grid" id="collectionsGrid">
+                        <!-- Collections will be loaded dynamically -->
+                    </div>
+                    <div class="empty-collections" id="emptyCollections" style="display: none;">
+                        <p>No collections yet!</p>
+                        <p>Create a collection to organize your gradients.</p>
+                    </div>
+                </div>
+
+                <!-- Community/Inspiration Feed Tab -->
+                <div id="communityTab" class="library-tab-content">
+                    <div class="community-header">
+                        <h4>Gradient Inspiration Feed</h4>
+                        <div class="community-filters">
+                            <button class="filter-btn active" data-filter="trending">Trending</button>
+                            <button class="filter-btn" data-filter="recent">Recent</button>
+                            <button class="filter-btn" data-filter="popular">Most Popular</button>
+                        </div>
+                        <div class="community-search">
+                            <input type="text" id="communitySearch" placeholder="Search by color, mood, or tag...">
+                            <button id="communitySearchBtn">Search</button>
+                        </div>
+                    </div>
+                    <div class="community-grid" id="communityGrid">
+                        <!-- Community gradients will be loaded here -->
+                    </div>
+                    <div class="community-actions">
+                        <button id="loadMoreCommunity" class="load-more-btn">Load More</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gradient Combination Modes -->
+            <section class="combination-section">
+                <h3>🎨 Gradient Combination Modes</h3>
+                <div class="combination-controls">
+                    <div class="combination-mode">
+                        <button id="layerGradientsBtn" class="combination-btn">
+                            Layer Multiple Gradients
+                        </button>
+                        <button id="mixGradientsBtn" class="combination-btn">
+                            Mix Two Gradients
+                        </button>
+                        <button id="morphGradientsBtn" class="combination-btn">
+                            Morph Between Gradients
+                        </button>
+                        <button id="splitCompareBtn" class="combination-btn">
+                            Split-Screen Compare
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="layerPanel" class="combination-panel" style="display: none;">
+                    <h4>Layer Gradients</h4>
+                    <div class="layer-list" id="gradientLayers">
+                        <!-- Layers will be added dynamically -->
+                    </div>
+                    <button id="addLayerBtn" class="add-layer-btn">+ Add Layer</button>
+                </div>
+
+                <div id="mixPanel" class="combination-panel" style="display: none;">
+                    <h4>Mix Two Gradients</h4>
+                    <div class="mix-controls">
+                        <div class="gradient-selector">
+                            <label>Gradient A:</label>
+                            <select id="gradientA">
+                                <option value="current">Current Gradient</option>
+                            </select>
+                        </div>
+                        <div class="gradient-selector">
+                            <label>Gradient B:</label>
+                            <select id="gradientB">
+                                <option value="">Select gradient...</option>
+                            </select>
+                        </div>
+                        <div class="mix-ratio">
+                            <label for="mixRatio">Mix Ratio: <span id="mixRatioValue">50%</span></label>
+                            <input type="range" id="mixRatio" min="0" max="100" value="50">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="morphPanel" class="combination-panel" style="display: none;">
+                    <h4>Morph Between Gradients</h4>
+                    <div class="morph-controls">
+                        <div class="gradient-selector">
+                            <label>Start Gradient:</label>
+                            <select id="morphStart"></select>
+                        </div>
+                        <div class="gradient-selector">
+                            <label>End Gradient:</label>
+                            <select id="morphEnd"></select>
+                        </div>
+                        <div class="morph-steps">
+                            <label for="morphSteps">Steps: <span id="morphStepsValue">10</span></label>
+                            <input type="range" id="morphSteps" min="2" max="20" value="10">
+                        </div>
+                        <button id="generateMorphBtn" class="generate-morph-btn">Generate Morph Sequence</button>
+                    </div>
+                    <div class="morph-preview" id="morphPreview"></div>
+                </div>
+
+                <div id="comparePanel" class="combination-panel" style="display: none;">
+                    <h4>Split-Screen Comparison</h4>
+                    <div class="compare-split">
+                        <div class="compare-side" id="compareSideA"></div>
+                        <div class="compare-divider" id="compareDivider"></div>
+                        <div class="compare-side" id="compareSideB"></div>
+                    </div>
+                    <div class="compare-controls">
+                        <button id="swapCompareBtn">Swap Sides</button>
+                        <button id="resetCompareBtn">Reset</button>
+                    </div>
+                </div>
+            </section>
