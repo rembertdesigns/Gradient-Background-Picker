@@ -666,3 +666,135 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Accessibility Features -->
+            <section class="accessibility-section">
+                <h3>♿ Accessibility Checker</h3>
+                <div class="accessibility-container">
+                    <div class="accessibility-controls">
+                        <button id="checkContrastBtn" class="check-btn active">Check Contrast</button>
+                        <button id="simulateColorBlindBtn" class="check-btn">Simulate Color Blindness</button>
+                        <button id="wcagComplianceBtn" class="check-btn">WCAG Compliance</button>
+                    </div>
+                    
+                    <!-- Contrast Checker -->
+                    <div id="contrastChecker" class="accessibility-panel active">
+                        <h4>Contrast Checker</h4>
+                        <div class="contrast-inputs">
+                            <div class="contrast-input-group">
+                                <label>Text Color:</label>
+                                <input type="color" id="textColor" value="#000000">
+                                <input type="text" id="textColorHex" value="#000000">
+                            </div>
+                            <div class="contrast-input-group">
+                                <label>Background (uses gradient):</label>
+                                <div class="gradient-sample" id="contrastBgSample"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="contrast-results">
+                            <div class="contrast-ratio">
+                                <span class="ratio-label">Contrast Ratio:</span>
+                                <span class="ratio-value" id="contrastRatio">-</span>
+                            </div>
+                            <div class="wcag-results">
+                                <div class="wcag-result" id="wcagAA">
+                                    <span class="wcag-level">WCAG AA:</span>
+                                    <span class="wcag-status">-</span>
+                                </div>
+                                <div class="wcag-result" id="wcagAAA">
+                                    <span class="wcag-level">WCAG AAA:</span>
+                                    <span class="wcag-status">-</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="contrast-preview">
+                            <div class="contrast-preview-box" id="contrastPreviewBox">
+                                <h3>Sample Heading</h3>
+                                <p>This is sample text to preview readability with your gradient background.</p>
+                                <button>Sample Button</button>
+                            </div>
+                        </div>
+
+                        <div class="readability-score">
+                            <h5>Text Readability Score</h5>
+                            <div class="score-bar">
+                                <div class="score-fill" id="readabilityScoreFill"></div>
+                                <span class="score-text" id="readabilityScoreText">-</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Color Blindness Simulation -->
+                    <div id="colorBlindnessSimulation" class="accessibility-panel">
+                        <h4>Color Blindness Simulation</h4>
+                        <div class="simulation-controls">
+                            <label for="colorBlindType">Simulation Type:</label>
+                            <select id="colorBlindType">
+                                <option value="normal">Normal Vision</option>
+                                <option value="protanopia">Protanopia (Red-Blind)</option>
+                                <option value="deuteranopia">Deuteranopia (Green-Blind)</option>
+                                <option value="tritanopia">Tritanopia (Blue-Blind)</option>
+                                <option value="protanomaly">Protanomaly (Red-Weak)</option>
+                                <option value="deuteranomaly">Deuteranomaly (Green-Weak)</option>
+                                <option value="tritanomaly">Tritanomaly (Blue-Weak)</option>
+                                <option value="achromatopsia">Achromatopsia (Monochromacy)</option>
+                                <option value="achromatomaly">Achromatomaly (Blue Cone Monochromacy)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="simulation-grid">
+                            <div class="simulation-item">
+                                <div class="simulation-label">Original</div>
+                                <div class="simulation-preview original" id="originalPreview"></div>
+                            </div>
+                            <div class="simulation-item">
+                                <div class="simulation-label" id="simulationLabel">Simulated</div>
+                                <div class="simulation-preview simulated" id="simulatedPreview"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="simulation-info">
+                            <p id="simulationDescription">Select a color blindness type to see how your gradient appears.</p>
+                            <div class="affected-population" id="affectedPopulation"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- WCAG Compliance -->
+                    <div id="wcagCompliance" class="accessibility-panel">
+                        <h4>WCAG Compliance Report</h4>
+                        <div class="compliance-score">
+                            <div class="score-circle" id="accessibilityScore">
+                                <span class="score-value" id="scoreValue">-</span>
+                                <span class="score-label">Score</span>
+                            </div>
+                            <div class="score-details">
+                                <div class="score-item">
+                                    <span class="score-icon">✓</span>
+                                    <span id="passedChecks">0</span> Passed
+                                </div>
+                                <div class="score-item warning">
+                                    <span class="score-icon">⚠️</span>
+                                    <span id="warningChecks">0</span> Warnings
+                                </div>
+                                <div class="score-item error">
+                                    <span class="score-icon">✗</span>
+                                    <span id="failedChecks">0</span> Failed
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="compliance-checklist" id="complianceChecklist">
+                            <!-- Checklist items will be populated dynamically -->
+                        </div>
+                        
+                        <div class="compliance-suggestions">
+                            <h5>Suggestions for Improvement:</h5>
+                            <ul id="suggestionsList">
+                                <!-- Suggestions will be populated dynamically -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
