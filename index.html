@@ -239,3 +239,166 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Mesh Gradient Section -->
+            <section class="mesh-gradient-section">
+                <div class="mesh-header">
+                    <h3>🕸️ Mesh Gradient</h3>
+                    <div class="mesh-toggle">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="meshModeToggle">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">Enable Mesh Mode</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div id="meshControls" class="mesh-controls" style="display: none;">
+                    <div class="mesh-grid-controls">
+                        <div class="mesh-control-group">
+                            <label for="meshGridSize">Grid Size:</label>
+                            <select id="meshGridSize">
+                                <option value="2x2">2×2</option>
+                                <option value="3x3" selected>3×3</option>
+                                <option value="4x4">4×4</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mesh-control-group">
+                            <button id="randomizeMesh" class="randomize-mesh-btn">🎲 Randomize Colors</button>
+                            <button id="resetMesh" class="reset-mesh-btn">↻ Reset Grid</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Mesh Grid Container -->
+                    <div class="mesh-grid-container">
+                        <div id="meshGrid" class="mesh-grid">
+                            <!-- Mesh points will be generated dynamically -->
+                        </div>
+                        <div class="mesh-instructions">
+                            <p>💡 Click on grid points to change colors</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Texture Section -->
+            <section class="texture-section">
+                <h3>🎭 Advanced Textures</h3>
+                
+                <div class="texture-controls">
+                    <!-- Texture Type -->
+                    <div class="texture-control-group">
+                        <label for="textureType">Texture Type:</label>
+                        <select id="textureType">
+                            <option value="none">None</option>
+                            <option value="paper">Paper</option>
+                            <option value="canvas">Canvas</option>
+                            <option value="fabric">Fabric</option>
+                            <option value="metal">Metal</option>
+                            <option value="glass">Glass</option>
+                            <option value="concrete">Concrete</option>
+                            <option value="wood">Wood</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Texture Intensity -->
+                    <div class="texture-control-group">
+                        <label for="textureIntensity">Texture Strength: <span id="textureIntensityValue">30%</span></label>
+                        <input type="range" id="textureIntensity" min="0" max="100" value="30" step="5">
+                    </div>
+                    
+                    <!-- Custom Texture Upload -->
+                    <div class="texture-control-group">
+                        <label>Custom Texture:</label>
+                        <div class="custom-texture-controls">
+                            <input type="file" id="customTexture" accept="image/*" style="display: none;">
+                            <button class="upload-texture-btn" id="uploadTextureBtn">📁 Upload Texture</button>
+                            <button class="clear-texture-btn" id="clearTextureBtn" style="display: none;">🗑️ Clear</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Texture Preview -->
+                <div class="texture-preview" id="texturePreview">
+                    <div class="texture-preview-item" data-texture="paper">Paper</div>
+                    <div class="texture-preview-item" data-texture="canvas">Canvas</div>
+                    <div class="texture-preview-item" data-texture="fabric">Fabric</div>
+                    <div class="texture-preview-item" data-texture="metal">Metal</div>
+                </div>
+
+                <!-- Advanced Pattern Overlays -->
+                <div class="advanced-patterns-section">
+                    <h4>Advanced Pattern Overlays</h4>
+                    <div class="pattern-upload">
+                        <input type="file" id="customPattern" accept="image/svg+xml,image/*" style="display: none;">
+                        <button id="uploadPatternBtn" class="upload-pattern-btn">📁 Upload SVG Pattern</button>
+                    </div>
+                    <div class="procedural-patterns">
+                        <label for="proceduralPattern">Procedural Pattern:</label>
+                        <select id="proceduralPattern">
+                            <option value="none">None</option>
+                            <option value="perlin">Perlin Noise</option>
+                            <option value="voronoi">Voronoi</option>
+                            <option value="fractal">Fractal</option>
+                            <option value="cellular">Cellular</option>
+                        </select>
+                    </div>
+                    <div class="pattern-animation">
+                        <label>
+                            <input type="checkbox" id="animatePattern">
+                            Animate Pattern
+                        </label>
+                        <input type="range" id="patternAnimSpeed" min="0.1" max="5" value="1" step="0.1" disabled>
+                    </div>
+                    <div class="depth-effect">
+                        <label for="depthEffect">3D Depth Effect:</label>
+                        <input type="range" id="depthEffect" min="0" max="100" value="0">
+                        <span id="depthValue">0%</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gradient Mask Section -->
+            <section class="mask-section">
+                <h3>🎭 Gradient Masks</h3>
+                
+                <div class="mask-controls">
+                    <div class="mask-control-group">
+                        <label for="maskType">Mask Type:</label>
+                        <select id="maskType">
+                            <option value="none">No Mask</option>
+                            <option value="circle">Circle</option>
+                            <option value="ellipse">Ellipse</option>
+                            <option value="polygon">Polygon</option>
+                            <option value="heart">Heart</option>
+                            <option value="star">Star</option>
+                            <option value="custom">Custom Path</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mask-control-group">
+                        <label for="maskSize">Mask Size: <span id="maskSizeValue">80%</span></label>
+                        <input type="range" id="maskSize" min="20" max="100" value="80" step="5">
+                    </div>
+                    
+                    <div class="mask-control-group">
+                        <label for="maskBlur">Edge Blur: <span id="maskBlurValue">0px</span></label>
+                        <input type="range" id="maskBlur" min="0" max="50" value="0" step="1">
+                    </div>
+                    
+                    <div class="mask-control-group" id="customMaskGroup" style="display: none;">
+                        <label>Custom SVG Path:</label>
+                        <textarea id="customMaskPath" placeholder="Enter SVG path data..." rows="3"></textarea>
+                    </div>
+                </div>
+                
+                <!-- Mask Presets -->
+                <div class="mask-presets">
+                    <div class="mask-preset" data-mask="circle">⭕</div>
+                    <div class="mask-preset" data-mask="heart">❤️</div>
+                    <div class="mask-preset" data-mask="star">⭐</div>
+                    <div class="mask-preset" data-mask="diamond">💎</div>
+                    <div class="mask-preset" data-mask="hexagon">⬡</div>
+                </div>
+            </section>
