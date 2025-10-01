@@ -798,3 +798,180 @@
                     </div>
                 </div>
             </section>
+
+            <!-- AI-Powered Suggestions -->
+            <section class="ai-suggestions-section">
+                <h3>🤖 AI-Powered Suggestions</h3>
+                <div class="ai-container">
+                    <div class="ai-tabs">
+                        <button class="ai-tab-btn active" data-ai-tab="similar">Similar Gradients</button>
+                        <button class="ai-tab-btn" data-ai-tab="mood">Mood-Based</button>
+                        <button class="ai-tab-btn" data-ai-tab="brand">Brand Palettes</button>
+                        <button class="ai-tab-btn" data-ai-tab="seasonal">Seasonal Trends</button>
+                    </div>
+                    
+                    <!-- Similar Gradients -->
+                    <div id="similarTab" class="ai-tab-content active">
+                        <div class="ai-panel-header">
+                            <h4>Similar Gradients</h4>
+                            <button id="generateSimilarBtn" class="ai-generate-btn">🔄 Generate Similar</button>
+                        </div>
+                        <div class="similarity-controls">
+                            <label for="similarityStrength">Variation Strength:</label>
+                            <input type="range" id="similarityStrength" min="10" max="100" value="30">
+                            <span id="similarityValue">30%</span>
+                        </div>
+                        <div class="ai-grid" id="similarGradientsGrid">
+                            <!-- Similar gradients will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Mood-Based Suggestions -->
+                    <div id="moodTab" class="ai-tab-content">
+                        <div class="ai-panel-header">
+                            <h4>Mood-Based Gradients</h4>
+                            <select id="moodSelector">
+                                <option value="">Select a mood...</option>
+                                <option value="energetic">Energetic & Vibrant</option>
+                                <option value="calm">Calm & Peaceful</option>
+                                <option value="romantic">Romantic & Warm</option>
+                                <option value="professional">Professional & Corporate</option>
+                                <option value="playful">Playful & Fun</option>
+                                <option value="mysterious">Mysterious & Dark</option>
+                                <option value="fresh">Fresh & Natural</option>
+                                <option value="luxurious">Luxurious & Elegant</option>
+                                <option value="nostalgic">Nostalgic & Retro</option>
+                                <option value="futuristic">Futuristic & Tech</option>
+                            </select>
+                        </div>
+                        <div class="mood-description" id="moodDescription">
+                            <p>Select a mood to see gradient suggestions that match that emotional tone.</p>
+                        </div>
+                        <div class="ai-grid" id="moodGradientsGrid">
+                            <!-- Mood-based gradients will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <!-- Brand Palettes -->
+                    <div id="brandTab" class="ai-tab-content">
+                        <div class="ai-panel-header">
+                            <h4>Brand Color Palette Generator</h4>
+                            <div class="brand-input-group">
+                                <input type="color" id="brandPrimaryColor" value="#3b82f6">
+                                <label>Primary Brand Color</label>
+                            </div>
+                            <button id="generateBrandPaletteBtn" class="ai-generate-btn">🎨 Generate Palette</button>
+                        </div>
+                        
+                        <div class="brand-palette-options">
+                            <div class="palette-option-group">
+                                <label for="brandStyle">Brand Style:</label>
+                                <select id="brandStyle">
+                                    <option value="modern">Modern & Minimal</option>
+                                    <option value="bold">Bold & Vibrant</option>
+                                    <option value="elegant">Elegant & Sophisticated</option>
+                                    <option value="playful">Playful & Creative</option>
+                                    <option value="trustworthy">Trustworthy & Professional</option>
+                                </select>
+                            </div>
+                            
+                            <div class="palette-option-group">
+                                <label for="paletteComplexity">Complexity:</label>
+                                <select id="paletteComplexity">
+                                    <option value="simple">Simple (2-3 colors)</option>
+                                    <option value="moderate">Moderate (3-4 colors)</option>
+                                    <option value="complex">Complex (4-5 colors)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="ai-grid" id="brandPalettesGrid">
+                            <!-- Brand palettes will be generated here -->
+                        </div>
+                        
+                        <div class="brand-export">
+                            <h5>Export Brand Colors:</h5>
+                            <div class="brand-export-options">
+                                <button id="exportBrandJSON" class="brand-export-btn">📄 JSON</button>
+                                <button id="exportBrandCSS" class="brand-export-btn">🎨 CSS Variables</button>
+                                <button id="exportBrandSass" class="brand-export-btn">💎 SASS</button>
+                                <button id="exportBrandSwatches" class="brand-export-btn">🎨 ASE (Adobe)</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Seasonal Trends -->
+                    <div id="seasonalTab" class="ai-tab-content">
+                        <div class="ai-panel-header">
+                            <h4>Seasonal & Trending Gradients</h4>
+                            <select id="seasonSelector">
+                                <option value="">Select a season or trend...</option>
+                                <option value="spring">Spring Fresh</option>
+                                <option value="summer">Summer Vibes</option>
+                                <option value="autumn">Autumn Warmth</option>
+                                <option value="winter">Winter Cool</option>
+                                <option value="holiday">Holiday Season</option>
+                                <option value="2025trends">2025 Design Trends</option>
+                                <option value="retro">Retro Revival</option>
+                                <option value="neon">Neon & Cyberpunk</option>
+                                <option value="pastel">Soft Pastels</option>
+                                <option value="earth">Earth Tones</option>
+                            </select>
+                        </div>
+                        <div class="seasonal-info" id="seasonalInfo">
+                            <p>Select a season or trend to explore popular gradient styles.</p>
+                        </div>
+                        <div class="ai-grid" id="seasonalGradientsGrid">
+                            <!-- Seasonal gradients will be generated here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Color Palette Extraction -->
+            <section class="palette-extraction-section">
+                <h3>🎨 Color Palette Extraction</h3>
+                <div class="extraction-container">
+                    <div class="extraction-tabs">
+                        <button class="extraction-tab-btn active" data-extraction-tab="image">From Image</button>
+                        <button class="extraction-tab-btn" data-extraction-tab="url">From Website</button>
+                    </div>
+
+                    <!-- Image Upload -->
+                    <div id="imageExtractionTab" class="extraction-tab-content active">
+                        <div class="upload-area" id="imageUploadArea">
+                            <input type="file" id="paletteImageUpload" accept="image/*" style="display: none;">
+                            <div class="upload-placeholder">
+                                <span class="upload-icon">📸</span>
+                                <p>Drop an image here or click to upload</p>
+                                <button id="selectImageBtn" class="select-image-btn">Select Image</button>
+                            </div>
+                        </div>
+                        <div class="extraction-preview" id="imagePreview" style="display: none;">
+                            <img id="uploadedImage" alt="Uploaded image">
+                        </div>
+                        <div class="extraction-controls">
+                            <label for="colorCount">Number of Colors:</label>
+                            <input type="range" id="colorCount" min="2" max="10" value="5">
+                            <span id="colorCountValue">5</span>
+                            <button id="extractColorsBtn" class="extract-btn">Extract Palette</button>
+                        </div>
+                        <div class="extracted-palette" id="extractedPalette"></div>
+                    </div>
+
+                    <!-- URL Scraper -->
+                    <div id="urlExtractionTab" class="extraction-tab-content">
+                        <div class="url-input-group">
+                            <input type="url" id="websiteUrl" placeholder="https://example.com">
+                            <button id="scrapeUrlBtn" class="scrape-btn">Scrape Colors</button>
+                        </div>
+                        <div class="scrape-status" id="scrapeStatus"></div>
+                        <div class="scraped-palette" id="scrapedPalette"></div>
+                    </div>
+
+                    <div class="palette-actions">
+                        <button id="applyExtractedPalette" class="apply-palette-btn">Apply to Gradient</button>
+                        <button id="saveExtractedPalette" class="save-palette-btn">Save Palette</button>
+                    </div>
+                </div>
+            </section>
