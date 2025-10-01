@@ -975,3 +975,201 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Performance Optimization Tools -->
+            <section class="performance-section">
+                <h3>⚡ Performance Optimization</h3>
+                <div class="performance-container">
+                    <div class="performance-metrics">
+                        <div class="metric-card">
+                            <h4>CSS Complexity</h4>
+                            <div class="metric-value" id="cssComplexity">-</div>
+                            <div class="metric-label">lines of code</div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>Performance Impact</h4>
+                            <div class="metric-value" id="performanceImpact">-</div>
+                            <div class="metric-label">score</div>
+                        </div>
+                        <div class="metric-card">
+                            <h4>File Size</h4>
+                            <div class="metric-value" id="fileSize">-</div>
+                            <div class="metric-label">estimated</div>
+                        </div>
+                    </div>
+
+                    <div class="optimization-suggestions">
+                        <h4>Optimization Suggestions</h4>
+                        <ul id="optimizationList">
+                            <!-- Suggestions will be populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <div class="browser-compatibility">
+                        <h4>Browser Compatibility</h4>
+                        <div class="browser-grid">
+                            <div class="browser-item">
+                                <span class="browser-icon">🌐</span>
+                                <span class="browser-name">Chrome</span>
+                                <span class="browser-status" id="chromeStatus">-</span>
+                            </div>
+                            <div class="browser-item">
+                                <span class="browser-icon">🦊</span>
+                                <span class="browser-name">Firefox</span>
+                                <span class="browser-status" id="firefoxStatus">-</span>
+                            </div>
+                            <div class="browser-item">
+                                <span class="browser-icon">🧭</span>
+                                <span class="browser-name">Safari</span>
+                                <span class="browser-status" id="safariStatus">-</span>
+                            </div>
+                            <div class="browser-item">
+                                <span class="browser-icon">🌊</span>
+                                <span class="browser-name">Edge</span>
+                                <span class="browser-status" id="edgeStatus">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="optimization-actions">
+                        <button id="optimizeCSS" class="optimize-btn">Optimize CSS</button>
+                        <button id="generateFallback" class="optimize-btn">Generate Fallback</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Advanced Export Section -->
+            <section class="export-section">
+                <h3>Export Your Gradient</h3>
+                <div class="export-tabs">
+                    <button class="tab-btn active" data-tab="css">CSS</button>
+                    <button class="tab-btn" data-tab="tailwind">Tailwind</button>
+                    <button class="tab-btn" data-tab="react">React</button>
+                    <button class="tab-btn" data-tab="scss">SCSS</button>
+                    <button class="tab-btn" data-tab="advanced">Advanced CSS</button>
+                    <button class="tab-btn" data-tab="vue">Vue</button>
+                    <button class="tab-btn" data-tab="svelte">Svelte</button>
+                    <button class="tab-btn" data-tab="angular">Angular</button>
+                    <button class="tab-btn" data-tab="flutter">Flutter</button>
+                    <button class="tab-btn" data-tab="swiftui">SwiftUI</button>
+                    <button class="tab-btn" data-tab="styled">Styled Components</button>
+                    <button class="tab-btn" data-tab="emotion">Emotion</button>
+                    <button class="tab-btn" data-tab="variables">CSS Variables</button>
+                </div>
+
+                <div class="export-content">
+                    <div id="cssTab" class="tab-content active">
+                        <textarea id="cssOutput" readonly placeholder="CSS code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="cssOutput">📋 Copy CSS</button>
+                    </div>
+
+                    <div id="tailwindTab" class="tab-content">
+                        <textarea id="tailwindOutput" readonly placeholder="Tailwind classes will appear here..."></textarea>
+                        <button class="copy-btn" data-target="tailwindOutput">📋 Copy Tailwind</button>
+                    </div>
+
+                    <div id="reactTab" class="tab-content">
+                        <textarea id="reactOutput" readonly placeholder="React JSX will appear here..."></textarea>
+                        <button class="copy-btn" data-target="reactOutput">📋 Copy React</button>
+                    </div>
+
+                    <div id="scssTab" class="tab-content">
+                        <textarea id="scssOutput" readonly placeholder="SCSS variables will appear here..."></textarea>
+                        <button class="copy-btn" data-target="scssOutput">📋 Copy SCSS</button>
+                    </div>
+
+                    <div id="advancedTab" class="tab-content">
+                        <textarea id="advancedOutput" readonly placeholder="Advanced CSS with patterns and effects will appear here..."></textarea>
+                        <button class="copy-btn" data-target="advancedOutput">📋 Copy Advanced CSS</button>
+                    </div>
+
+                    <div id="vueTab" class="tab-content">
+                        <textarea id="vueOutput" readonly placeholder="Vue.js code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="vueOutput">📋 Copy Vue</button>
+                    </div>
+
+                    <div id="svelteTab" class="tab-content">
+                        <textarea id="svelteOutput" readonly placeholder="Svelte code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="svelteOutput">📋 Copy Svelte</button>
+                    </div>
+
+                    <div id="angularTab" class="tab-content">
+                        <textarea id="angularOutput" readonly placeholder="Angular code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="angularOutput">📋 Copy Angular</button>
+                    </div>
+
+                    <div id="flutterTab" class="tab-content">
+                        <textarea id="flutterOutput" readonly placeholder="Flutter code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="flutterOutput">📋 Copy Flutter</button>
+                    </div>
+
+                    <div id="swiftuiTab" class="tab-content">
+                        <textarea id="swiftuiOutput" readonly placeholder="SwiftUI code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="swiftuiOutput">📋 Copy SwiftUI</button>
+                    </div>
+
+                    <div id="styledTab" class="tab-content">
+                        <textarea id="styledOutput" readonly placeholder="Styled Components code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="styledOutput">📋 Copy Styled Components</button>
+                    </div>
+
+                    <div id="emotionTab" class="tab-content">
+                        <textarea id="emotionOutput" readonly placeholder="Emotion CSS code will appear here..."></textarea>
+                        <button class="copy-btn" data-target="emotionOutput">📋 Copy Emotion</button>
+                    </div>
+
+                    <div id="variablesTab" class="tab-content">
+                        <textarea id="variablesOutput" readonly placeholder="CSS custom properties will appear here..."></textarea>
+                        <button class="copy-btn" data-target="variablesOutput">📋 Copy Variables</button>
+                    </div>
+                </div>
+
+                <!-- Advanced Export Options -->
+                <div class="advanced-export-options">
+                    <h4>Advanced Export Options</h4>
+                    
+                    <div class="export-option-group">
+                        <button id="exportHTMLTemplate" class="export-option-btn">
+                            📄 Complete HTML Template
+                        </button>
+                        <button id="exportWordPress" class="export-option-btn">
+                            🌐 WordPress Snippet
+                        </button>
+                        <button id="exportShopify" class="export-option-btn">
+                            🛍️ Shopify Theme Code
+                        </button>
+                    </div>
+
+                    <div class="export-option-group">
+                        <button id="exportFigma" class="export-option-btn">
+                            🎨 Figma Plugin Format
+                        </button>
+                        <button id="exportSketch" class="export-option-btn">
+                            💎 Sketch Format
+                        </button>
+                    </div>
+
+                    <div class="export-resolution">
+                        <label for="exportResolution">PNG Resolution:</label>
+                        <select id="exportResolution">
+                            <option value="1920x1080">1920×1080 (Full HD)</option>
+                            <option value="2560x1440">2560×1440 (2K)</option>
+                            <option value="3840x2160">3840×2160 (4K)</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                        <div id="customResolution" style="display: none;">
+                            <input type="number" id="customWidth" placeholder="Width">
+                            <input type="number" id="customHeight" placeholder="Height">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Options -->
+                <div class="download-options">
+                    <button id="downloadPNG" class="download-btn">📥 Download PNG</button>
+                    <button id="downloadSVG" class="download-btn">📥 Download SVG</button>
+                    <button id="downloadGIF" class="download-btn">📥 Download GIF (Animated)</button>
+                    <button id="downloadMP4" class="download-btn">🎥 Download MP4 (Video)</button>
+                    <button id="randomGradient" class="random-btn">🎲 Random Gradient</button>
+                </div>
+            </section>
