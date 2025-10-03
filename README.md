@@ -155,3 +155,67 @@ A powerful, feature-rich gradient generator that lets you create beautiful anima
 - Adjust color stops by clicking on color inputs
 - Change gradient type and angle
 - Add animations and export your creation
+
+### No Build Process Required
+This project uses vanilla JavaScript, HTML, and CSS - no complex build tools or dependencies needed!
+
+## 🎮 How to Use
+
+### Creating Your First Gradient
+1. **Choose Colors**: Click on color stops to open the advanced color picker
+2. **Adjust Positions**: Drag the position sliders to move color stops
+3. **Set Type & Angle**: Choose linear, radial, or conic gradients
+4. **Add Animation**: Select rotation, shift, or pulse effects
+5. **Export**: Copy CSS, download images, or save to favorites
+
+### Advanced Features
+
+#### Pattern & Texture Overlays
+1. Navigate to the "Pattern & Effects" section
+2. Select a pattern type (noise, stripes, dots, waves)
+3. Adjust intensity and scale sliders
+4. Choose blend modes for unique effects
+5. Upload custom textures for personalized looks
+
+#### Mesh Gradient Mode
+1. Enable mesh mode with the toggle switch
+2. Select grid size (2×2, 3×3, or 4×4)
+3. Click on grid points to change colors
+4. Use randomize for instant variations
+5. Reset to start fresh
+
+#### Interactive Canvas Editing
+1. Enable interactive mode on the canvas
+2. Click and drag color stops to reposition
+3. Double-click to add new stops
+4. Right-click stops to remove them
+5. Adjust bezier intensity for smooth transitions
+
+#### Timeline Animation Editor
+1. Add keyframes at different time points
+2. Set gradient appearance for each keyframe
+3. Choose easing functions (linear, ease, bounce, etc.)
+4. Play/pause to preview animation
+5. Export as CSS keyframes or video
+
+#### AI-Powered Suggestions
+1. Go to "AI-Powered Suggestions" section
+2. Generate similar gradients with variation control
+3. Explore mood-based gradients (energetic, calm, romantic, etc.)
+4. Create brand palettes from a single color
+5. Discover seasonal and trending gradients
+
+#### Accessibility Testing
+1. Open "Accessibility Checker" section
+2. Test contrast ratios with different text colors
+3. Simulate 8+ types of color blindness
+4. Review WCAG compliance report
+5. Get suggestions for improvements
+
+#### Color Palette Extraction
+1. Upload an image or enter a website URL
+2. Extract color palette automatically
+3. Apply extracted colors to your gradient
+4. Save palettes for later use
+
+## 🏗️ Project Structure
