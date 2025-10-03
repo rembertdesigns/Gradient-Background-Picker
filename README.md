@@ -151,3 +151,7 @@ A powerful, feature-rich gradient generator that lets you create beautiful anima
    # or
    python -m http.server 8000  # For local development server
 ```
+3. **Start creating!**
+- Adjust color stops by clicking on color inputs
+- Change gradient type and angle
+- Add animations and export your creation
