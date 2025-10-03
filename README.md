@@ -123,3 +123,31 @@ A powerful, feature-rich gradient generator that lets you create beautiful anima
 - **CSS Variables**: Custom properties format
 - **PNG/SVG Downloads**: High-quality image exports (Full HD, 2K, 4K)
 - **GIF/MP4**: Animated gradient exports
+
+### 🤝 Collaboration & Sharing
+- **Social Media Previews**: Generate cards for Twitter and Facebook
+- **Platform Sharing**: Direct sharing to Dribbble, Behance, Twitter, and Pinterest
+- **WordPress & Shopify**: Export format-specific code snippets
+- **Figma & Sketch**: Design tool integration formats
+
+### 🎓 Learning & Onboarding
+- **Interactive Tutorial**: Step-by-step guided tour
+- **Keyboard Shortcuts**: Efficient workflow with hotkeys
+- **Context Help**: Tooltips and inline guidance
+- **Video Export**: Create gradient animation videos
+
+## 🚀 Getting Started
+
+### Quick Start
+1. **Clone the repository**
+```bash
+   git clone https://github.com/rembertdesigns/gradient-generator.git
+   cd gradient-generator
+```
+2. **Open in browser**
+```bash
+# Simply open index.html in your browser
+   open index.html
+   # or
+   python -m http.server 8000  # For local development server
+```
