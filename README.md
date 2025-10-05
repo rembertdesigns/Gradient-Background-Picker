@@ -261,3 +261,12 @@ gradient-generator/
 ## 🔧 Customization
 
 ### Adding New Animation Types
+```javascript
+// In main.js, extend the animation system
+updateAnimation() {
+    // Add your custom animation logic here
+    if (this.animationType === 'your-animation') {
+        // Custom animation implementation
+    }
+}
+```
