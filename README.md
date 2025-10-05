@@ -289,3 +289,13 @@ generatePattern(type) {
     }
 }
 ```
+### Theming
+Modify CSS custom properties in `style.css`:
+```javascript
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --background-blur: 10px;
+    /* Customize colors and effects */
+}
+```
