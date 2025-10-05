@@ -444,3 +444,19 @@ We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING
 - AI suggestion improvements
 
 ### Development Setup
+```bash
+# Clone your fork
+git clone https://github.com/yourusername/gradient-generator.git
+cd gradient-generator
+
+# Create a new branch
+git checkout -b feature/your-feature-name
+
+# Make changes and test in browser
+# No build process required!
+
+# Commit and push
+git add .
+git commit -m "Description of changes"
+git push origin feature/your-feature-name
+```
