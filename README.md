@@ -370,3 +370,77 @@ A: Use the Accessibility Checker section to test contrast ratios, simulate color
 - **?**: Show Keyboard Shortcuts
 
 ## 🗺️ Roadmap
+
+### Recently Added ✅
+- [x] **Mesh Gradient Mode**: Multi-point gradient system with interactive grid
+- [x] **Advanced Patterns & Textures**: 7+ texture types with custom upload support
+- [x] **Timeline Animation Editor**: Keyframe-based animations with custom easing
+- [x] **Accessibility Suite**: Contrast checker, color blindness simulation, WCAG compliance
+- [x] **AI-Powered Suggestions**: Similar gradients, mood-based, brand palettes, seasonal trends
+- [x] **Color Palette Extraction**: From images and websites
+- [x] **Gradient Combinations**: Layer, mix, morph, and compare modes
+- [x] **Interactive Canvas**: Visual gradient editing with bezier curves
+- [x] **Gradient Masks**: Shape masks with custom SVG support
+- [x] **Performance Tools**: Optimization analysis and browser compatibility
+- [x] **Extended Export Options**: 13+ format including Flutter, SwiftUI, and video
+- [x] **Collaboration Features**: QR codes, embeds, social media cards
+- [x] **Community Feed**: Browse trending gradients
+- [x] **Tutorial System**: Interactive onboarding
+
+### Near Term (Next Release)
+- [ ] **3D Gradient Preview**: WebGL-powered 3D visualization
+- [ ] **Gradient Animation Presets**: Pre-built animation templates
+- [ ] **Collaborative Editing**: Real-time multi-user editing
+- [ ] **Version History**: Track gradient changes over time
+- [ ] **Custom Easing Curves**: Visual bezier curve editor
+- [ ] **Gradient Interpolation**: Smart color mixing algorithms
+
+### Medium Term (Next 3 Months)
+- [ ] **AI Color Naming**: Automatic gradient name generation
+- [ ] **Advanced Morphing**: Multi-gradient transition sequences
+- [ ] **Design System Integration**: Figma/Sketch plugin support
+- [ ] **Mobile App**: Progressive Web App with offline support
+- [ ] **Team Workspaces**: Organization-level gradient libraries
+- [ ] **API Access**: Programmatic gradient generation
+
+### Long Term (6+ Months)
+- [ ] **Machine Learning**: Smart gradient recommendations based on usage
+- [ ] **3D Mesh Gradients**: Volumetric gradient rendering
+- [ ] **AR Preview**: See gradients in augmented reality
+- [ ] **Cloud Sync**: Cross-device gradient synchronization
+- [ ] **Marketplace**: Share and sell gradient packs
+- [ ] **Integration SDK**: Embed generator in other applications
+
+### Community Requested
+- [ ] **Gradient to Code**: Reverse engineer gradients from images
+- [ ] **Batch Processing**: Generate multiple gradient variations
+- [ ] **Color Spaces**: Support for LAB, LCH, and other color spaces
+- [ ] **Gradient Blending Modes**: Advanced mixing techniques
+- [ ] **Print Optimization**: CMYK export for print design
+
+*Have an idea? [Open an issue](../../issues) or contribute to the discussion!*
+
+## 🤝 Contributing
+
+We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
+
+### Quick Start for Contributors
+1. **Fork the repository**
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Commit changes**: `git commit -m 'Add amazing feature'`
+4. **Push to branch**: `git push origin feature/amazing-feature`
+5. **Open a Pull Request**
+
+### Ideas for Contributions
+- New animation types
+- Additional export formats
+- Color accessibility tools
+- Performance optimizations
+- UI/UX improvements
+- Documentation improvements
+- Bug fixes and testing
+- New pattern types
+- Mesh gradient enhancements
+- AI suggestion improvements
+
+### Development Setup
