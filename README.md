@@ -299,3 +299,74 @@ Modify CSS custom properties in `style.css`:
     /* Customize colors and effects */
 }
 ```
+## 🌐 Browser Support
+
+- **Chrome/Edge**: Full support including eyedropper tool
+- **Firefox**: Full support (eyedropper coming soon)
+- **Safari**: Full support with minor animation differences
+- **Mobile**: Responsive design works on all devices
+
+### Feature Support by Browser
+| Feature | Chrome | Firefox | Safari | Edge |
+|---------|--------|---------|--------|------|
+| Basic Gradients | ✅ | ✅ | ✅ | ✅ |
+| Animations | ✅ | ✅ | ✅ | ✅ |
+| Eyedropper | ✅ | ⏳ | ⏳ | ✅ |
+| Canvas Export | ✅ | ✅ | ✅ | ✅ |
+| Mesh Gradients | ✅ | ✅ | ✅ | ✅ |
+| Timeline Editor | ✅ | ✅ | ✅ | ✅ |
+
+## 📱 Responsive Design
+
+The generator is fully responsive and works beautifully on:
+- **Desktop**: Full-featured experience with all tools
+- **Tablet**: Optimized layout with touch-friendly controls
+- **Mobile**: Streamlined interface with essential features
+
+## ❓ FAQ & Troubleshooting
+
+### Common Issues
+
+**Q: Animations aren't working on my browser**
+A: Animations use CSS transforms and may have limited support on older browsers. Try updating your browser or disabling hardware acceleration if you experience performance issues.
+
+**Q: Eyedropper tool says "not supported"**
+A: The EyeDropper API is currently supported in Chrome/Edge 95+. Firefox and Safari support is coming soon. You can still manually enter color values.
+
+**Q: My gradients look different when exported**
+A: Some complex gradients with many color stops might render differently across browsers. Test your exported CSS in your target browsers for consistency.
+
+**Q: Local storage data is gone**
+A: Favorites and collections are stored in browser local storage. Clear browser data or incognito mode will reset these. Use the export feature to backup your gradients.
+
+**Q: Can I use this for commercial projects?**
+A: Yes! This project is MIT licensed, so you can use generated gradients in any project, commercial or personal.
+
+**Q: How do I use the mesh gradient feature?**
+A: Enable mesh mode in the Mesh Gradient section, select your grid size, and click on grid points to change colors. You can also randomize for quick variations.
+
+**Q: Can I extract colors from images?**
+A: Yes! Use the Color Palette Extraction section to upload images or enter website URLs. The tool will automatically extract the dominant colors.
+
+**Q: How do I test if my gradient is accessible?**
+A: Use the Accessibility Checker section to test contrast ratios, simulate color blindness, and get WCAG compliance reports with improvement suggestions.
+
+### Performance Tips
+- Limit animations on mobile devices for better battery life
+- Use fewer color stops for smoother gradients
+- Export static CSS for production instead of keeping animations
+- Test performance impact score before using complex patterns
+- Generate optimized CSS for better rendering
+
+### Keyboard Shortcuts
+
+- **Ctrl/Cmd + S**: Save to Favorites
+- **Ctrl/Cmd + C**: Copy CSS
+- **Ctrl/Cmd + Z**: Undo
+- **Ctrl/Cmd + Y**: Redo
+- **Alt + R**: Random Gradient
+- **Alt + D**: Toggle Dark Mode
+- **Space**: Play/Pause Animation
+- **?**: Show Keyboard Shortcuts
+
+## 🗺️ Roadmap
