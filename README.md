@@ -270,3 +270,22 @@ updateAnimation() {
     }
 }
 ```
+### Custom Color Presets
+```javascript
+// Add to the presets array in loadPresets()
+const customPresets = [
+    { name: 'Your Brand', gradient: 'linear-gradient(45deg, #yourcolor1, #yourcolor2)' },
+    // Add more presets
+];
+```
+### Adding New Patterns
+```javascript
+// In the pattern generation section
+generatePattern(type) {
+    switch(type) {
+        case 'your-pattern':
+            // Custom pattern generation logic
+            break;
+    }
+}
+```
